@@ -12,6 +12,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and th
 - **obsidian** skill (integrations, v3.8.0): RULE 0 "SKILL BEFORE MCP" guardrail — agents must follow SKILL.md workflow before calling any `mcp__obsidian__*` tools directly. Cross-Skill Invocation section with 3-priority invocation guide (Skill tool, natural language trigger, direct SKILL.md read). Expanded `auto_invoke` from 8 to 31 patterns covering EN/ES, SYNC/READ, and vault variants.
 
 ### Changed
+- **project-brain** skill (workflow, v2.7.0): Strengthened mandatory user prompt for `brain_dir` resolution — agents can no longer silently choose the default path. New RULE 7 (NO SILENT DEFAULTS). `brain-config.md` Step 2 marked MANDATORY. `SAVE.md` Step 0 includes enforcement note.
 - **code-analyzer** skill (analytics, v2.5.0): Post-Production Delivery updated with explicit obsidian skill invocation block and MCP guardrail.
 - **universal-planner** skill (planning, v3.5.0): EXECUTE mode Post-Production Delivery updated with obsidian invocation block. Integration table updated with explicit invocation instructions and MCP guardrail.
 - **sprint-forge** skill (workflow, v1.6.0): Integration table updated with explicit obsidian skill invocation instructions and MCP guardrail.

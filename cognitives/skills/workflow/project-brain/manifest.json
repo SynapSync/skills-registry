@@ -2,7 +2,7 @@
   "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
   "name": "project-brain",
   "type": "skill",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "Session memory for AI agents — load context, save sessions, evolve knowledge",
   "author": {
     "name": "SynapSync",
@@ -37,6 +37,16 @@
   },
   "homepage": "https://synapsync.dev/cognitives/project-brain",
   "changelog": [
+    {
+      "version": "2.7.0",
+      "date": "2026-02-21",
+      "changes": [
+        "Strengthened mandatory user prompt for brain_dir resolution — agents can no longer silently choose the default path",
+        "Added RULE 7 (NO SILENT DEFAULTS) to Critical Rules",
+        "brain-config.md Step 2 marked as MANDATORY with explicit warning block",
+        "SAVE.md Step 0 includes AskUserQuestion enforcement note"
+      ]
+    },
     {
       "version": "2.6.0",
       "date": "2026-02-21",

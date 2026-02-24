@@ -8,6 +8,8 @@ Saves session context to a brain document. Two sub-modes: **INIT** (create new) 
 
 Resolve `{brain_dir}` using the [brain-config helper](../helpers/brain-config.md). This determines where brain documents are stored before any file operations.
 
+**IMPORTANT**: If no `brain_dir` is configured in AGENTS.md, the helper requires you to ask the user where to store brain documents via `AskUserQuestion`. Never assume the default path.
+
 After this step, `{brain_dir}` is set (e.g., `.agents/project-brain` or a custom path from AGENTS.md).
 
 ---

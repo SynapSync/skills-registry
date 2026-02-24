@@ -15,9 +15,11 @@ Run this **before** any path-dependent step in LOAD or SAVE:
 3. If the block exists → find `## Configuration` table → look for a `brain_dir` row
 4. If the `brain_dir` row exists → extract the value, set `{brain_dir}`, done
 
-### Step 2 — Ask the User
+### Step 2 — Ask the User (MANDATORY)
 
 If AGENTS.md doesn't exist, has no SynapSync Skills block, or the block has no `brain_dir` key in the Configuration table, **ask the user**:
+
+> **NEVER choose the default on behalf of the user.** You MUST call `AskUserQuestion` and wait for their selection. Proceeding without asking is a violation of the Configuration Resolution convention.
 
 ```
 AskUserQuestion:

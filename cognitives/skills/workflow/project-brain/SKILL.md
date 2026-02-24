@@ -9,7 +9,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: synapsync
-  version: "2.6"
+  version: "2.7"
   scope: [root]
   auto_invoke:
     # English triggers — LOAD
@@ -102,6 +102,10 @@ A markdown file that captures project state, session history, architecture decis
 >
 > **Conversation** (briefings, confirmations, questions) → respond in the same language the user used.
 > **Brain document content** (what gets written to file) → always in English, regardless of conversation language. Technical artifacts must be consistent across sessions.
+
+> **RULE 7 — NO SILENT DEFAULTS**
+>
+> When `{brain_dir}` is not configured in AGENTS.md, you MUST ask the user via `AskUserQuestion` before proceeding. Never silently choose the default staging path. The user must actively confirm their preferred directory.
 
 ---
 
