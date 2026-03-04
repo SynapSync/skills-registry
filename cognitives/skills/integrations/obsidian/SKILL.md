@@ -2,12 +2,12 @@
 name: obsidian
 description: >
   Unified Obsidian vault operations: sync documents to vault, read notes for context,
-  search knowledge, and validate markdown standards. MCP preferred, filesystem fallback available.
+  search knowledge, and validate markdown standards. Filesystem-based, no MCP required.
   Trigger: When user wants to read from or write to Obsidian vault.
 license: Apache-2.0
 metadata:
   author: synapsync
-  version: "3.9"
+  version: "4.0"
   scope: [root]
   auto_invoke:
     # English — SYNC
@@ -42,7 +42,7 @@ metadata:
     - "busca en el vault"
     - "consulta en obsidian"
     - "lee del vault"
-allowed-tools: Read, Write, Glob, Grep, Bash, ToolSearch, AskUserQuestion
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
 # Obsidian Vault Manager
@@ -86,46 +86,19 @@ This skill supports **bilingual operation** (English + Spanish):
 
 ## Critical Rules
 
-> **RULE 0 — SKILL BEFORE MCP: NEVER BYPASS THIS SKILL**
->
-> When performing ANY Obsidian vault operation, you MUST follow this skill's workflow (SYNC or READ mode) BEFORE calling any `mcp__obsidian__*` tools. Direct MCP calls skip frontmatter generation, cross-reference validation, vault destination resolution, and the Obsidian markdown standard. The MCP tools are implementation details used BY this skill — they are not standalone operations.
->
-> **If you have this skill loaded**: Read the appropriate mode asset and follow the workflow.
-> **If another skill tells you to "use the obsidian skill"**: Invoke it via `Skill("obsidian")` or say "sync to obsidian" to trigger auto_invoke. If neither is available, read this SKILL.md directly before proceeding.
-
-> **RULE 1 — DETECT ACCESS MODE FIRST**
->
-> Before any vault operation, detect whether MCP is available:
-> ```
-> ToolSearch query: "+obsidian write"
-> ```
-> If tools load successfully → use **MCP Mode** (preferred, optimized).
-> If ToolSearch returns no results or tools fail → use **Filesystem Fallback Mode** (ask user for vault path, use Read/Write/Edit/Glob/Bash).
->
-> In MCP Mode, load all needed tools before calling them (they are deferred):
-> ```
-> ToolSearch query: "+obsidian write"    # For SYNC operations
-> ToolSearch query: "+obsidian read"     # For READ operations
-> ToolSearch query: "+obsidian list"     # For vault browsing
-> ToolSearch query: "+obsidian frontmatter"  # For metadata operations
-> ToolSearch query: "+obsidian info"     # For batch metadata
-> ToolSearch query: "+obsidian search"   # For search and tags
-> ```
-> Never call `mcp__obsidian__*` tools without loading them first. In Fallback Mode, skip tool loading entirely.
-
-> **RULE 2 — MODE DETECTION: AUTO-SELECT FROM USER INTENT**
+> **RULE 1 — MODE DETECTION: AUTO-SELECT FROM USER INTENT**
 >
 > Detect the operation mode from the user's input. Never force a mode that doesn't match the scenario.
 
-> **RULE 3 — PRESERVE CONTENT INTEGRITY (SYNC mode)**
+> **RULE 2 — PRESERVE CONTENT INTEGRITY (SYNC mode)**
 >
 > Read source files completely before writing. Never modify document body content (headings, paragraphs, tables, code blocks, `## Referencias` section). Only add/merge frontmatter metadata. Cross-reference fixes update the `related` frontmatter array only — never the document body.
 
-> **RULE 4 — NEVER FABRICATE CONTENT (READ mode)**
+> **RULE 3 — NEVER FABRICATE CONTENT (READ mode)**
 >
 > Only report information that exists verbatim in notes. Quote sources with paths. Distinguish between "the note says X" and "I interpret X based on notes".
 
-> **RULE 5 — FOLLOW OBSIDIAN MARKDOWN STANDARD**
+> **RULE 4 — FOLLOW OBSIDIAN MARKDOWN STANDARD**
 >
 > All operations follow the [Obsidian markdown standard](assets/standards/obsidian-md-standard.md) specification for frontmatter, wiki-links, types, and cross-references.
 
@@ -133,9 +106,7 @@ This skill supports **bilingual operation** (English + Spanish):
 
 ## Tool Dependencies
 
-This skill uses **native Claude Code tools** (Read, Write, Glob, Grep, Bash, ToolSearch, AskUserQuestion) and **13 Obsidian MCP tools** (deferred — must be loaded via ToolSearch before first use; see Rule 1).
-
-For detailed MCP tool parameter contracts and gotchas, see [assets/helpers/tool-reference.md](assets/helpers/tool-reference.md).
+This skill uses native Claude Code tools only: `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Bash`, `AskUserQuestion`. No MCP or external dependencies required.
 
 ---
 
@@ -181,7 +152,6 @@ AskUserQuestion:
 | Move/reorganize notes | ✅ | ❌ |
 | Patch notes (partial edit) | ✅ | ❌ |
 | Metadata-only reads | ❌ | ✅ |
-| Filesystem fallback | ✅ | ✅ |
 
 ---
 
@@ -350,11 +320,11 @@ Then follow the SYNC or READ mode workflow. NEVER call `mcp__obsidian__*` tools 
 
 ## Limitations
 
-- **MCP recommended**: Obsidian MCP server provides optimized operations. Both modes (SYNC and READ) have filesystem fallback when MCP is unavailable — slightly slower but fully functional
 - **Markdown only**: Handles `.md` files, not binary assets/images
 - **Single vault**: Operates on one vault at a time
 - **No bidirectional sync**: Writes TO vault (SYNC) or reads FROM vault (READ), not both-way sync
 - **Read-only in READ mode**: Cannot modify notes in READ mode (use SYNC for writing)
+- **Search is regex/literal**: Uses Grep — no fuzzy search. Broaden the pattern if results are sparse.
 
 ---
 

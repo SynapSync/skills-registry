@@ -57,7 +57,7 @@ synapse-registry/
 | [skill-creator](cognitives/skills/general/skill-creator/) | general | 3.3.0 | Creates AI skills following SynapSync spec with templates and best practices |
 | [universal-planner](cognitives/skills/planning/universal-planner/) | planning | 3.5.0 | Unified planning and execution skill for any software scenario with PLAN and EXECUTE modes |
 | [code-analyzer](cognitives/skills/analytics/code-analyzer/) | analytics | 2.5.0 | Analyzes code modules and generates structured technical reports with architecture diagrams |
-| [obsidian](cognitives/skills/integrations/obsidian/) | integrations | 3.9.0 | Unified Obsidian vault manager: sync documents, read notes, and search knowledge |
+| [obsidian](cognitives/skills/integrations/obsidian/) | integrations | 4.0.0 | Unified Obsidian vault manager: sync documents, read notes, and search knowledge |
 | [sprint-forge](cognitives/skills/workflow/sprint-forge/) | workflow | 1.8.0 | Adaptive sprint workflow — analysis, roadmap, iterative sprints, debt tracking, and context persistence |
 | [project-brain](cognitives/skills/workflow/project-brain/) | workflow | 2.7.0 | Session memory for AI agents — load context, save sessions, evolve knowledge |
 

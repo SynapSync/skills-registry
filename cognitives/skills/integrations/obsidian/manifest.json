@@ -2,7 +2,7 @@
   "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
   "name": "obsidian",
   "type": "skill",
-  "version": "3.9.0",
+  "version": "4.0.0",
   "description": "Unified Obsidian vault manager: sync documents, read notes, and search knowledge",
   "author": {
     "name": "SynapSync",
@@ -31,12 +31,24 @@
   "homepage": "https://synapsync.dev/cognitives/obsidian",
   "assets": {
     "modes": 2,
-    "helpers": 5
-  },
-  "optionalDependencies": {
-    "mcp": ["obsidian"]
+    "helpers": 4
   },
   "changelog": [
+    {
+      "version": "4.0.0",
+      "date": "2026-03-03",
+      "changes": [
+        "Breaking: Remove MCP dependency entirely — filesystem-only operation",
+        "Rewrite SYNC.md to filesystem-only workflow (no dual MCP/fallback branches)",
+        "Rewrite READ.md to filesystem-only workflow (Grep replaces search_notes, Read/Glob replace list/read MCP tools)",
+        "Delete tool-reference.md (MCP tool contracts no longer needed)",
+        "Remove ToolSearch from allowed-tools",
+        "Remove RULE 0 (SKILL BEFORE MCP) and RULE 1 (DETECT ACCESS MODE) — no longer applicable",
+        "Renumber remaining rules (1-4)",
+        "Add Edit tool to allowed-tools for partial note updates",
+        "Update description: filesystem-based, no MCP required"
+      ]
+    },
     {
       "version": "3.9.0",
       "date": "2026-03-03",
@@ -151,5 +163,5 @@
     }
   ],
   "createdAt": "2026-02-12T00:00:00Z",
-  "updatedAt": "2026-03-03T00:00:00Z"
+  "updatedAt": "2026-03-03T02:00:00Z"
 }
