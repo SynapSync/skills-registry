@@ -2,7 +2,7 @@
   "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
   "name": "obsidian",
   "type": "skill",
-  "version": "3.8.0",
+  "version": "3.9.0",
   "description": "Unified Obsidian vault manager: sync documents, read notes, and search knowledge",
   "author": {
     "name": "SynapSync",
@@ -26,7 +26,7 @@
   "file": "SKILL.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/SynapSync/synapse-registry"
+    "url": "https://github.com/SynapSync/skills-registry"
   },
   "homepage": "https://synapsync.dev/cognitives/obsidian",
   "assets": {
@@ -37,6 +37,15 @@
     "mcp": ["obsidian"]
   },
   "changelog": [
+    {
+      "version": "3.9.0",
+      "date": "2026-03-03",
+      "changes": [
+        "Remove sprint-forge from Integration table — sprint-forge no longer delegates to obsidian",
+        "Remove AGENTS.md branded block dependency for vault_destination — resolved at runtime via SYNC mode Step 3",
+        "Remove sprint-forge from SYNC.md staging-aware producer list"
+      ]
+    },
     {
       "version": "3.8.0",
       "date": "2026-02-21",
@@ -142,5 +151,5 @@
     }
   ],
   "createdAt": "2026-02-12T00:00:00Z",
-  "updatedAt": "2026-02-21T00:00:00Z"
+  "updatedAt": "2026-03-03T00:00:00Z"
 }

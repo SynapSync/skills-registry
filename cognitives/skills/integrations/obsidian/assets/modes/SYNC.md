@@ -407,7 +407,7 @@ When the user asks to "sync my output to vault" or "move staging to obsidian", t
 ### When to Use
 
 - User says "sync my staging output to obsidian" or "move my reports to vault"
-- After a producer skill (universal-planner, code-analyzer, sprint-forge) completes and the user wants to persist output in the vault
+- After a producer skill (universal-planner, code-analyzer) completes and the user wants to persist output in the vault
 
 ### Workflow
 

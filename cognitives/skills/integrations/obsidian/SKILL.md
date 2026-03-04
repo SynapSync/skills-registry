@@ -7,7 +7,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: synapsync
-  version: "3.8"
+  version: "3.9"
   scope: [root]
   auto_invoke:
     # English — SYNC
@@ -255,15 +255,9 @@ Read, search, and reason over vault notes to provide contextual knowledge for de
 
 ## Configuration Resolution
 
-Before starting any mode workflow, resolve `{vault_destination}` — the subpath within the Obsidian vault where this project's documents are synced.
+`{vault_destination}` is resolved at runtime — SYNC mode browses the vault and asks the user where to save. No pre-configuration or persistence needed. See SYNC.md Step 3.
 
-1. **Read** `{cwd}/AGENTS.md` → scan for `<!-- synapsync-skills:start -->` block → find `## Configuration` table → parse `vault_destination` row
-2. If `vault_destination` found → use it as the default vault destination, done
-3. If not found → ask the user for the vault destination path, then persist to the Configuration table in AGENTS.md
-
-The obsidian skill follows the same 6-case persistence rules as other skills. See [project-brain brain-config.md](../../../workflow/project-brain/assets/helpers/brain-config.md) for the full block template and persistence algorithm.
-
-**Staging-aware**: The skill also works closely with producer skills (universal-planner, code-analyzer, sprint-forge) that stage their output in `.agents/staging/{skill-name}/{project-name}/`. When the user says "sync my output to vault", SYNC mode detects `.agents/staging/`, lists available directories, lets the user pick, and syncs to `{vault_destination}`.
+**Staging-aware**: When the user says "sync my output to vault", SYNC mode detects `.agents/` directories from producer skills (universal-planner, code-analyzer), lists available output, lets the user pick, and syncs to the chosen vault destination.
 
 ---
 
@@ -297,7 +291,6 @@ For compliance validation, see [assets/validators/obsidian-linter.md](assets/val
 | `universal-planner` | SYNC: Saves planning docs to vault. READ: Provides historical plans as context |
 | `code-analyzer` | SYNC: Saves technical reports. READ: Surfaces architecture notes |
 | `universal-planner` (EXECUTE mode) | READ: Retrieves sprint plans and progress |
-| `sprint-forge` | SYNC: Saves findings, roadmap, sprint files, and re-entry prompts to vault. READ: Provides project history and debt context across sessions. |
 
 **Composition pattern:**
 ```
