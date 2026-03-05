@@ -61,7 +61,7 @@ synapse-registry/
 | [obsidian](cognitives/skills/integrations/obsidian/) | integrations | 4.0.0 | Unified Obsidian vault manager: sync documents, read notes, and search knowledge |
 | [sprint-forge](cognitives/skills/workflow/sprint-forge/) | workflow | 1.8.0 | Adaptive sprint workflow — analysis, roadmap, iterative sprints, debt tracking, and context persistence |
 | [project-brain](cognitives/skills/workflow/project-brain/) | workflow | 2.8.0 | Session memory for AI agents — load context, save sessions, evolve knowledge |
-| [growth-ceo](cognitives/skills/planning/growth-ceo/) | planning | 1.1.0 | CEO-level strategist generating high-leverage initiatives, product ideas, and growth opportunities |
+| [growth-ceo](cognitives/skills/planning/growth-ceo/) | planning | 1.4.0 | CEO-level strategist generating high-leverage initiatives, product ideas, and growth opportunities |
 
 ### Agents
 
