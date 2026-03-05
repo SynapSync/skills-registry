@@ -9,6 +9,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and th
 ## [Unreleased]
 
 ### Added
+- **growth-ceo** skill (planning, v1.1.0): CEO-level strategic initiative engine. Generates high-leverage initiatives, product ideas, and growth opportunities across three time horizons (short/medium/long). Structured output format per initiative (Problem, Vision, Execution, Impact, Risks, Reference). Persists approved initiatives to `{output_dir}/initiatives/` as individual `.md` files with sequential numbering. Configuration Resolution via AGENTS.md branded block. Post-Production Delivery with Obsidian sync option. Inspired by thinking patterns of Jobs, Bezos, Nadella, Hastings, Huang, and Chesky.
+- **growth-architect** skill (planning, v2.6.0): AI Co-Founder & Growth Architect for strategic clarity, product vision, MVP design, and architecture decisions (ADRs). Modular assets (1 mode, 1 helper, 2 templates). Strategic-only responsibility — execution delegated to sprint-forge. Uses `{output_dir}` convention. Includes Configuration Resolution, Asset Loading, Post-Production Delivery.
 - **obsidian** skill (integrations, v3.8.0): RULE 0 "SKILL BEFORE MCP" guardrail — agents must follow SKILL.md workflow before calling any `mcp__obsidian__*` tools directly. Cross-Skill Invocation section with 3-priority invocation guide (Skill tool, natural language trigger, direct SKILL.md read). Expanded `auto_invoke` from 8 to 31 patterns covering EN/ES, SYNC/READ, and vault variants.
 
 ### Changed

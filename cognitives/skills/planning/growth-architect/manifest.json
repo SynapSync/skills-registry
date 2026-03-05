@@ -1,0 +1,69 @@
+{
+  "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
+  "name": "growth-architect",
+  "type": "skill",
+  "version": "2.6.0",
+  "description": "AI Co-Founder & Growth Architect: strategic clarity, product vision, MVP design, and ADRs",
+  "author": {
+    "name": "joicodev",
+    "url": "https://github.com/joicodev"
+  },
+  "license": "Apache-2.0",
+  "category": "planning",
+  "tags": [
+    "strategy",
+    "growth",
+    "product",
+    "founder",
+    "architecture",
+    "vision",
+    "startup",
+    "MVP",
+    "ADR"
+  ],
+  "providers": [
+    "claude",
+    "openai",
+    "cursor",
+    "windsurf",
+    "copilot",
+    "gemini"
+  ],
+  "file": "SKILL.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SynapSync/skills-registry"
+  },
+  "createdAt": "2026-01-19T22:05:00Z",
+  "updatedAt": "2026-03-04T00:00:00Z",
+  "assets": {
+    "modes": 1,
+    "helpers": 1,
+    "templates": 2
+  },
+  "changelog": [
+    {
+      "version": "2.6.0",
+      "date": "2026-03-04",
+      "changes": [
+        "Refactor: modularize into assets/ (1 mode, 1 helper, 2 templates)",
+        "Redefine responsibility boundary — strategic clarity only, execution delegated to sprint-forge",
+        "Replace hardcoded .ai/workspace/ paths with {output_dir} convention",
+        "Replace task-planner references with sprint-forge",
+        "Add Configuration Resolution, Asset Loading, Post-Production Delivery sections",
+        "Add allowed-tools to frontmatter",
+        "Remove emojis from headers",
+        "Remove execution overlap (documentation step, task breakdowns, output template extracted to assets/templates/)",
+        "Remove Integration Mode (redundant with sprint-forge handoff)",
+        "Fix repository URL to SynapSync/skills-registry"
+      ]
+    },
+    {
+      "version": "2.5.0",
+      "date": "2026-03-04",
+      "changes": [
+        "Added to SynapSync Registry in planning category"
+      ]
+    }
+  ]
+}
