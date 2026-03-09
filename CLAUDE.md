@@ -39,7 +39,7 @@ Every cognitive lives in `cognitives/{type}s/{category}/{name}/` and must contai
 - **code-analyzer** (`cognitives/skills/analytics/code-analyzer/`) — Analyzes code modules and generates structured technical reports with architecture diagrams.
 - **obsidian** (`cognitives/skills/integrations/obsidian/`) — Unified Obsidian vault manager with SYNC and READ modes. Syncs documents to vault and reads/searches notes via filesystem (Read/Write/Edit/Glob/Grep). Includes the Obsidian markdown standard specification and linter as internal assets. Claude-only.
 - **sprint-forge** (`cognitives/skills/workflow/sprint-forge/`) — Adaptive sprint workflow with 3 modes (INIT, SPRINT, STATUS). Deep analysis, evolving roadmap, one-at-a-time sprints, formal debt tracking, and re-entry prompts for context persistence. Language-agnostic. Modular assets: 3 modes, 4 helpers, 4 templates.
-- **project-brain** (`cognitives/skills/workflow/project-brain/`) — Session memory for AI agents: LOAD mode recovers context, SAVE mode persists sessions. Auto-discovery of brain documents, incremental merge, configurable brain directory via AGENTS.md branded block.
+- **project-brain** (`cognitives/skills/workflow/project-brain/`) — Session memory for AI agents: LOAD mode recovers context, SAVE mode persists sessions. Auto-discovery of brain documents, incremental merge, configurable brain directory.
 - **growth-ceo** (`cognitives/skills/planning/growth-ceo/`) — CEO-level strategic initiative engine. Generates high-leverage initiatives, product ideas, and growth opportunities across three time horizons. Conversational output, no file I/O.
 
 ### Agents
@@ -125,33 +125,15 @@ Modular skills (2+ modes) MUST include mode-gated asset loading instructions in 
 
 ### Configuration Resolution Convention
 
-Skills that persist configuration (output paths, vault destinations, etc.) use the **branded AGENTS.md block** as the single source of truth. When no config exists, skills **ask the user** for their preferred path before writing anything.
+Skills that produce output resolve `{output_dir}` at runtime — no external config files needed.
 
-**AGENTS.md branded block** (`<!-- synapsync-skills:start/end -->`):
+**Resolution algorithm** (same for all skills):
 
-Skills read and write config keys to a shared `## Configuration` table inside the branded block in the project's `AGENTS.md`. This is the **only** config source — values persist across sessions. See `project-brain/assets/helpers/brain-config.md` for the full block template and 6-case persistence rules.
+1. **User message context** — If the user's message contains file paths, extract `{output_dir}` from those paths
+2. **Auto-discover** — Scan for `.agents/{skill-name}/` in `{cwd}`
+3. **Ask the user** — If nothing found, ask where to save documents. Default suggestion: `.agents/{skill-name}/{project-name}/`
 
-**Default staging path** (offered as an option, never used silently):
-
-When a skill needs to ask the user for a path, it offers a default option:
-
-```
-.agents/staging/{skill-name}/{project-name}/
-```
-
-- `{skill-name}` — the skill's name (e.g., `universal-planner`, `code-analyzer`, `sprint-forge`)
-- `{project-name}` — inferred from the current directory name or git repository name
-
-**How skills resolve `{output_dir}`:**
-1. **Read** `{cwd}/AGENTS.md` → scan for `<!-- synapsync-skills:start -->` block → find `## Configuration` table → parse `output_dir` row
-2. If `output_dir` found → use it, done
-3. If not found → **ask the user**:
-   - Option A: **Use default** → `.agents/staging/{skill-name}/{project-name}/`
-   - Option B: **Provide a custom path** → user specifies their preferred directory
-4. **Persist** the chosen value to the AGENTS.md Configuration table
-5. **Present** the resolved path to the user before proceeding
-
-**IMPORTANT**: Skills must NEVER silently fall back to staging. Always ask the user first.
+No AGENTS.md. No branded blocks. Each skill resolves its output directory at runtime.
 
 **When creating a new skill that produces output**, you MUST:
 1. Use `{output_dir}` for all output paths (e.g., `{output_dir}/planning/`, `{output_dir}/technical/`)
@@ -161,19 +143,17 @@ When a skill needs to ask the user for a path, it offers a default option:
 
 **Standard Configuration Resolution section** (copy this into new skills):
 
-```markdown
+````markdown
 ## Configuration Resolution
 
-Before starting any workflow step, resolve `{output_dir}` — the directory where output documents are stored.
+`{output_dir}` is the directory where {skill-name} stores generated documents. Resolve it once at the start:
 
-1. **Read** `{cwd}/AGENTS.md` → scan for `<!-- synapsync-skills:start -->` block → find `## Configuration` table → parse `output_dir` row
-2. If `output_dir` found → use it, done
-3. If not found → **ask the user**:
-   - Option A: **Use default** (`.agents/staging/{skill-name}/{project-name}/`)
-   - Option B: **Provide a custom path**
-4. **Persist** the chosen value to AGENTS.md Configuration table
-5. **Present** the resolved path to the user before proceeding
-```
+1. **User message context** — If the user's message contains file paths, extract `{output_dir}` from those paths
+2. **Auto-discover** — Scan for `.agents/{skill-name}/` in `{cwd}`
+3. **Ask the user** — If nothing found, ask where to save documents. Default suggestion: `.agents/{skill-name}/{project-name}/`
+
+No AGENTS.md. No branded blocks. The output directory is resolved at runtime.
+````
 
 **Standard Post-Production Delivery step** (add at end of skill workflow):
 
@@ -182,7 +162,7 @@ Before starting any workflow step, resolve `{output_dir}` — the directory wher
 
 After all documents are generated in `{output_dir}`, offer the user delivery options:
 
-1. **Sync to Obsidian vault** — invoke the `obsidian` skill in SYNC mode (see invocation below)
+1. **Sync to Obsidian vault** — invoke the `obsidian` skill in SYNC mode
 2. **Move to custom path** — user specifies a destination and files are moved there
 3. **Keep in place** — leave files in `{output_dir}` for later use
 
@@ -208,10 +188,9 @@ This project uses conventional commits: `feat:`, `fix:`, `chore:`, `docs:`, etc.
 - Maximum 10 tags per cognitive
 - Description maximum 100 characters
 - Skills that produce output MUST use `{output_dir}` variable (never hardcoded paths)
-- Skills that produce output MUST include a `## Configuration Resolution` section with branded AGENTS.md block as primary source
-- No `output_dir` field in SKILL.md frontmatter (resolved at runtime via branded block or user prompt)
+- Skills that produce output MUST include a `## Configuration Resolution` section
+- No `output_dir` field in SKILL.md frontmatter (resolved at runtime)
 - Skills that produce output MUST include a post-production delivery step
-- Skills that persist config MUST use the branded `<!-- synapsync-skills:start/end -->` block in AGENTS.md
 - Modular skills (2+ modes) MUST have `## Asset Loading (Mode-Gated)` section
 - SKILL.md frontmatter MUST NOT contain `changelog:` key (use manifest.json)
 - SKILL.md body MUST NOT contain `## Version History` section

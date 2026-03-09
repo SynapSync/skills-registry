@@ -8,9 +8,9 @@ Saves session context to a brain document. Two sub-modes: **INIT** (create new) 
 
 Resolve `{brain_dir}` using the [brain-config helper](../helpers/brain-config.md). This determines where brain documents are stored before any file operations.
 
-**IMPORTANT**: If no `brain_dir` is configured in AGENTS.md, the helper requires you to ask the user where to store brain documents via `AskUserQuestion`. Never assume the default path.
+**IMPORTANT**: If no `brain_dir` has been resolved, the helper requires you to ask the user where to store brain documents via `AskUserQuestion`. Never assume the default path.
 
-After this step, `{brain_dir}` is set (e.g., `.agents/project-brain` or a custom path from AGENTS.md).
+After this step, `{brain_dir}` is set (e.g., `.agents/project-brain` or a custom path from the user).
 
 ---
 
@@ -35,7 +35,7 @@ Ask before the first write:
 
 Path resolution:
 - **Option 1**: `{cwd}/{brain_dir}/{project-name}.md` — create `{brain_dir}/` if needed
-- **Option 2**: `{user-root}/{project-name}.md` — save directly, no `project-brain/` namespace. After writing, persist the custom `{brain_dir}` to AGENTS.md if not already done (see [brain-config helper](../helpers/brain-config.md)).
+- **Option 2**: `{user-root}/{project-name}.md` — save directly, no `project-brain/` namespace.
 
 `{project-name}` is inferred from the current directory name or git repository name (kebab-case).
 
@@ -93,7 +93,7 @@ Do NOT write until the user confirms.
    - Accumulated Context starts empty (just headers) unless the user provided architecture decisions
    - Set metadata: `Last updated: {today}`, `Sessions: 1`
 2. Write the file to the resolved path
-3. After writing, persist `{brain_dir}` to AGENTS.md if not already done (see [brain-config helper](../helpers/brain-config.md))
+3. After writing, confirm the save path to the user
 
 ### UPDATE Sub-Mode
 

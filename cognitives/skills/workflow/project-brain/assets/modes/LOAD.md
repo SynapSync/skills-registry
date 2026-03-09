@@ -8,7 +8,7 @@ Loads a brain document and delivers a structured context briefing. Supports Obsi
 
 Resolve `{brain_dir}` using the [brain-resolve helper](../helpers/brain-resolve.md).
 
-After this step, `{brain_dir}` is set (e.g., `.agents/staging/project-brain/my-app` or a custom path from AGENTS.md).
+After this step, `{brain_dir}` is set (e.g., `.agents/project-brain/my-app` or a custom path from the user).
 
 ---
 

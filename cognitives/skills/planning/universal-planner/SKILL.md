@@ -190,15 +190,15 @@ Use when implementing an existing plan:
 
 ## Configuration Resolution
 
-Before starting any mode workflow, resolve `{output_dir}` — the directory where planning documents are stored.
+`{output_dir}` is the directory where universal-planner stores all planning documents. Resolve it once at the start:
 
-1. **Read** `{cwd}/AGENTS.md` → scan for `<!-- synapsync-skills:start -->` block → find `## Configuration` table → parse `output_dir` row
-2. If `output_dir` found → use it, done
-3. If not found → **ask the user**: default (`.agents/staging/universal-planner/{project-name}/`) or custom path → persist chosen value to AGENTS.md Configuration table
+1. **User message context** — If the user's message contains file paths, extract `{output_dir}` from those paths
+2. **Auto-discover** — Scan for `.agents/universal-planner/` in `{cwd}`
+3. **Ask the user** — If nothing found, ask where to save documents. Default suggestion: `.agents/universal-planner/{project-name}/`
 
-See [assets/helpers/output-resolve.md](assets/helpers/output-resolve.md) for the lightweight resolver. For full persistence rules and error handling, see [assets/helpers/config-resolver.md](assets/helpers/config-resolver.md).
+No AGENTS.md. No branded blocks. The output directory is resolved at runtime.
 
-All `{output_dir}` references depend on this resolution.
+See [assets/helpers/output-resolve.md](assets/helpers/output-resolve.md) for the lightweight resolver. For full error handling, see [assets/helpers/config-resolver.md](assets/helpers/config-resolver.md).
 
 ---
 

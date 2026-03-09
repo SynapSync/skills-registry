@@ -4,13 +4,11 @@ Resolves `{brain_dir}` — the directory where brain documents are stored. Run t
 
 ## Algorithm
 
-1. **Read** `{cwd}/AGENTS.md`
-2. **Scan** for `<!-- synapsync-skills:start -->` … `<!-- synapsync-skills:end -->` block
-3. If found → find `## Configuration` table → look for `brain_dir` row → extract value → set `{brain_dir}`, **done**
-4. If not found (no AGENTS.md, no block, or no `brain_dir` row) → **ask the user**:
-   - Default (Recommended): `.agents/staging/project-brain/`
+1. **User message context** — If the user's message contains file paths to brain documents, extract `{brain_dir}` from those paths
+2. **Auto-discover** — Scan for `.agents/project-brain/` in `{cwd}`, or look for existing brain documents (files matching `*-brain.md` pattern)
+3. **Ask the user** — If nothing found, ask via `AskUserQuestion`:
+   - Default (Recommended): `.agents/project-brain/{project-name}/`
    - Or custom path via "Other"
-5. **Persist** the chosen value to AGENTS.md — see [brain-config.md](brain-config.md) for persistence rules and block template
-6. **Validate**: directory not existing is OK for SAVE INIT (will create). For LOAD, report error and ask for alternative path.
+4. **Validate**: directory not existing is OK for SAVE INIT (will create). For LOAD, report error and ask for alternative path.
 
 After resolution, `{brain_dir}` is set for all subsequent operations.

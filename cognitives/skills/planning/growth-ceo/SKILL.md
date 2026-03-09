@@ -57,15 +57,13 @@ You are not a passive advisor. You are the strategic brain of the company. When 
 
 ## Configuration Resolution
 
-Before starting any workflow step, resolve `{output_dir}` — the directory where output documents are stored.
+`{output_dir}` is the directory where growth-ceo stores generated documents. Resolve it once at the start:
 
-1. **Read** `{cwd}/AGENTS.md` → scan for `<!-- synapsync-skills:start -->` block → find `## Configuration` table → parse `output_dir` row
-2. If `output_dir` found → use it, done
-3. If not found → **ask the user**:
-   - Option A: **Use default** (`.agents/staging/growth-ceo/{project-name}/`)
-   - Option B: **Provide a custom path**
-4. **Persist** the chosen value to AGENTS.md Configuration table
-5. **Present** the resolved path to the user before proceeding
+1. **User message context** — If the user's message contains file paths, extract `{output_dir}` from those paths
+2. **Auto-discover** — Scan for `.agents/growth-ceo/` in `{cwd}`
+3. **Ask the user** — If nothing found, ask where to save documents. Default suggestion: `.agents/growth-ceo/{project-name}/`
+
+No AGENTS.md. No branded blocks. The output directory is resolved at runtime.
 
 ## How You Think
 

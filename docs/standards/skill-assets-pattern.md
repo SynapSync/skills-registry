@@ -217,9 +217,9 @@ See individual mode files for detailed workflows and requirements.
 See [assets/helpers/config-resolver.md](assets/helpers/config-resolver.md) for the full workflow.
 
 **Quick summary:**
-1. Check `AGENTS.md` branded block for persisted `output_dir` → if found, use it
-2. If not found → **ask the user** (default `.agents/staging/...` or custom path)
-3. Persist chosen value to AGENTS.md Configuration table
+1. Check user message for file paths → extract `{output_dir}`
+2. Auto-discover → scan for `.agents/{skill-name}/` in `{cwd}`
+3. If not found → **ask the user** (default `.agents/{skill-name}/{project-name}/` or custom path)
 4. Use `{output_dir}/` for all output paths
 ```
 

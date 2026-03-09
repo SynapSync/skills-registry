@@ -16,7 +16,7 @@ This directory contains the modular components of the `project-brain` skill.
 | File | Description |
 |------|-------------|
 | [brain-resolve.md](helpers/brain-resolve.md) | Lightweight `{brain_dir}` resolution algorithm — used by LOAD |
-| [brain-config.md](helpers/brain-config.md) | Full persistence rules and AGENTS.md block template — used by SAVE |
+| [brain-config.md](helpers/brain-config.md) | Brain directory configuration and persistence rules — used by SAVE |
 | [incremental-merge.md](helpers/incremental-merge.md) | Per-section merge algorithm for SAVE UPDATE, session compaction, migration |
 
 ### templates/ (1 file)

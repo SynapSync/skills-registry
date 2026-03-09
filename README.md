@@ -174,14 +174,13 @@ The obsidian skill requires only **Obsidian** with your vault stored on the loca
 
 ## Output Path Convention
 
-Skills that produce output documents (reports, plans, analysis) resolve their output path from the **AGENTS.md branded block**. When no config exists (first-time use), skills **ask the user** for their preferred path before writing anything.
+Skills that produce output documents (reports, plans, analysis) resolve their output path at runtime. No external config files needed.
 
 ### How It Works
 
-1. **Read** `AGENTS.md` → look for `output_dir` in the `<!-- synapsync-skills:start -->` Configuration table
-2. If found → use it, done
-3. If not found → **ask the user**: use default (`.agents/staging/{skill-name}/{project-name}/`) or provide a custom path
-4. **Persist** the chosen value to AGENTS.md so future sessions skip the prompt
+1. **User message context** — If the user's message contains file paths, extract `{output_dir}` from those paths
+2. **Auto-discover** — Scan for `.agents/{skill-name}/` in `{cwd}`
+3. **Ask the user** — If nothing found, ask where to save documents. Default suggestion: `.agents/{skill-name}/{project-name}/`
 
 After generating output, skills offer **post-production delivery**: sync to Obsidian vault (via the `obsidian` skill -- never calling MCP tools directly), move to a custom path, or keep in place.
 

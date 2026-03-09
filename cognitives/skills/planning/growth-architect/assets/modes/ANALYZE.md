@@ -16,7 +16,7 @@ ls {output_dir}/analysis/*.md 2>/dev/null | sort -r | head -5
 ls {output_dir}/adr/*.md 2>/dev/null | sort -r | head -5
 
 # Check for project conventions
-ls CLAUDE.md AGENTS.md README.md 2>/dev/null
+ls CLAUDE.md README.md 2>/dev/null
 ```
 
 **Then state:**

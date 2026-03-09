@@ -96,7 +96,7 @@ A markdown file that captures project state, session history, architecture decis
 
 > **RULE 5 — PATH RESOLUTION ONCE**
 >
-> Resolve `{brain_dir}` once per session via AGENTS.md config (see Configuration Resolution). The resolved path is used for all operations. Don't re-ask unless the user wants to change the path.
+> Resolve `{brain_dir}` once per session (see Configuration Resolution). The resolved path is used for all operations. Don't re-ask unless the user wants to change the path.
 
 > **RULE 6 — LANGUAGE SEPARATION**
 >
@@ -105,22 +105,21 @@ A markdown file that captures project state, session history, architecture decis
 
 > **RULE 7 — NO SILENT DEFAULTS**
 >
-> When `{brain_dir}` is not configured in AGENTS.md, you MUST ask the user via `AskUserQuestion` before proceeding. Never silently choose the default staging path. The user must actively confirm their preferred directory.
+> When `{brain_dir}` has not been resolved, you MUST ask the user via `AskUserQuestion` before proceeding. Never silently choose the default staging path. The user must actively confirm their preferred directory.
 
 ---
 
 ## Configuration Resolution
 
-Before starting any mode workflow, resolve `{brain_dir}` — the directory where brain documents are stored.
+`{brain_dir}` is the directory where project-brain stores brain documents. Resolve it once per session:
 
-1. **Read** `{cwd}/AGENTS.md` → scan for `<!-- synapsync-skills:start -->` block → find `## Configuration` table → parse `brain_dir` row
-2. If `brain_dir` found → use it, done
-3. If not found → **ask the user**:
-   - Option A: **Use default** (`.agents/staging/project-brain/`)
-   - Or select "Other" to write a custom path
-4. **Persist** the chosen value to AGENTS.md Configuration table
+1. **User message context** — If the user's message contains file paths, extract `{brain_dir}` from those paths
+2. **Auto-discover** — Scan for `.agents/project-brain/` in `{cwd}`, or look for existing brain documents
+3. **Ask the user** — If nothing found, ask where to store brain documents via `AskUserQuestion`. Default suggestion: `.agents/project-brain/{project-name}/`
 
-Full resolution algorithm: see [assets/helpers/brain-config.md](assets/helpers/brain-config.md)
+No AGENTS.md. No branded blocks. The brain directory is resolved at runtime.
+
+Full resolution algorithm: see [assets/helpers/brain-resolve.md](assets/helpers/brain-resolve.md)
 
 ---
 
@@ -159,7 +158,7 @@ Use at the start of a session to restore context:
 
 > Load the project brain.
 
-This will: resolve `{brain_dir}` from AGENTS.md, scan for existing documents, read the brain, parse sections, and deliver a context briefing.
+This will: resolve `{brain_dir}`, scan for existing documents, read the brain, parse sections, and deliver a context briefing.
 
 **Assets to read now:** [assets/modes/LOAD.md](assets/modes/LOAD.md) + [brain-resolve.md](assets/helpers/brain-resolve.md)
 
@@ -179,7 +178,7 @@ This will: detect if a brain exists (UPDATE) or not (INIT), gather session data,
 
 | Capability | LOAD | SAVE (INIT) | SAVE (UPDATE) |
 |-----------|:----:|:-----------:|:-------------:|
-| Resolve `{brain_dir}` from AGENTS.md | Yes | Yes | Yes |
+| Resolve `{brain_dir}` | Yes | Yes | Yes |
 | Auto-discover brain documents | Yes | No | Yes |
 | Read brain from Obsidian vault | Yes | No | No |
 | Read brain from filesystem | Yes | No | No |
