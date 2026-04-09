@@ -1,0 +1,44 @@
+{
+  "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
+  "name": "audit",
+  "type": "skill",
+  "version": "1.0.0",
+  "description": "Multi-domain codebase audit: security, contracts, patterns, observability, and ops",
+  "author": {
+    "name": "SynapSync",
+    "url": "https://github.com/SynapSync",
+    "email": "hello@synapsync.dev"
+  },
+  "license": "Apache-2.0",
+  "category": "analytics",
+  "tags": [
+    "audit",
+    "security",
+    "code-quality",
+    "observability",
+    "ops",
+    "contracts",
+    "patterns",
+    "codebase-review"
+  ],
+  "providers": [
+    "claude"
+  ],
+  "file": "SKILL.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SynapSync/skills-registry"
+  },
+  "homepage": "https://synapsync.dev/cognitives/audit",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-04-09",
+      "changes": [
+        "Initial release — multi-domain codebase audit covering security, contracts, patterns, observability, and ops"
+      ]
+    }
+  ],
+  "createdAt": "2026-04-09T00:00:00Z",
+  "updatedAt": "2026-04-09T00:00:00Z"
+}

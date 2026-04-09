@@ -8,6 +8,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and th
 
 ## [Unreleased]
 
+### Added
+- **audit** skill (analytics, v1.0.0): Multi-domain codebase audit covering security, contracts, patterns, observability, and ops. Two-phase workflow: context detection then domain checks. Evidence-first findings with BLOCKER/HIGH/MEDIUM/LOW severity and AUDIT PASSED / AUDIT FAILED verdict.
+
 ### Changed
 - **Convention**: Replace `{project-name}` with `{scope}` in Configuration Resolution default suggestion across all skills and docs. `{scope}` represents the work topic (e.g., `oauth-implementation`, `ui-redesign`), not the repo name — avoids redundant paths like `project/.agents/skill/project/`.
 - **growth-ceo** skill (planning, v2.1.0): Configuration Resolution uses `{scope}`. Fix Step 3 Persist inconsistency — replace `{project-name}` with `{analysis-name}` to match existing naming convention.
