@@ -57,6 +57,7 @@ synapse-registry/
 | [skill-creator](cognitives/skills/general/skill-creator/) | general | 3.4.0 | Creates AI skills following SynapSync spec with templates and best practices |
 | [prompt-improver](cognitives/skills/general/prompt-improver/) | general | 1.0.0 | Analyze and improve prompts using Claude's official prompting best practices |
 | [audit](cognitives/skills/analytics/audit/) | analytics | 1.0.0 | Multi-domain codebase audit: security, contracts, patterns, observability, and ops |
+| [dead-code-auditor](cognitives/skills/analytics/dead-code-auditor/) | analytics | 1.0.0 | Surgical dead code audit: orphan files, unused symbols, dead params, and commented-out code |
 | [code-analyzer](cognitives/skills/analytics/code-analyzer/) | analytics | 2.7.0 | Analyzes code modules and generates structured technical reports with architecture diagrams |
 | [obsidian](cognitives/skills/integrations/obsidian/) | integrations | 4.1.0 | Unified Obsidian vault manager: sync documents, read notes, and search knowledge |
 | [project-brain](cognitives/skills/workflow/project-brain/) | workflow | 2.9.0 | Session memory for AI agents — load context, save sessions, evolve knowledge |

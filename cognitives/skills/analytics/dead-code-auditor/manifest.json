@@ -1,0 +1,54 @@
+{
+  "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
+  "name": "dead-code-auditor",
+  "type": "skill",
+  "version": "1.0.0",
+  "description": "Surgical dead code audit: orphan files, unused symbols, dead params, and commented-out code",
+  "author": {
+    "name": "joicodev",
+    "url": "https://github.com/joicodev",
+    "email": "roimerj63@gmail.com"
+  },
+  "license": "Apache-2.0",
+  "category": "analytics",
+  "tags": [
+    "dead-code",
+    "audit",
+    "unused",
+    "refactor",
+    "cleanup",
+    "static-analysis",
+    "orphan-files",
+    "code-quality"
+  ],
+  "providers": [
+    "claude",
+    "openai",
+    "cursor",
+    "windsurf",
+    "copilot",
+    "gemini",
+    "codex"
+  ],
+  "file": "SKILL.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SynapSync/skills-registry"
+  },
+  "createdAt": "2026-05-26T00:00:00Z",
+  "updatedAt": "2026-05-26T00:00:00Z",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-05-26",
+      "changes": [
+        "Initial release — six dead code categories: orphan files, unused classes/functions, dead methods/getters, unused constructor parameters, unused imports, commented-out code",
+        "Evidence-first methodology: every finding backed by cross-project grep search",
+        "Language-aware edge case handling: DI containers, reflection, code generation, re-export barrels, abstract classes",
+        "Risk classification: 🟢 Low / 🟡 Medium / 🔴 High with language-specific guidance",
+        "Structured Markdown report with executive summary table",
+        "Post-audit offer to generate removal plan via claude-mem:make-plan"
+      ]
+    }
+  ]
+}
