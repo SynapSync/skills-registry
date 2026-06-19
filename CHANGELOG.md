@@ -9,6 +9,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and th
 ## [Unreleased]
 
 ### Added
+- **ad3c-cycle** skill (workflow, v1.0.0): Per-task implementation micro-cycle — Analyze, Develop, Certify, Correct, Close. Language-agnostic QA checklists for TypeScript, Python, Go, Rust, shell, JSON, and YAML. Correction loop with 3-iteration escalation rule and evidence format for task tracking integration.
+
+### Added
 - **dead-code-auditor** skill (analytics, v1.0.0): Surgical dead code audit for any language. Six categories: orphan files, unused classes/functions, dead methods/getters, unused constructor parameters, unused imports, and commented-out code. Evidence-first approach — every finding backed by cross-project grep. Language-aware edge case handling (DI containers, reflection, code generation, re-export barrels). Risk classification 🟢/🟡/🔴. Post-audit offer to generate a removal plan via `claude-mem:make-plan`.
 - **audit** skill (analytics, v1.0.0): Multi-domain codebase audit covering security, contracts, patterns, observability, and ops. Two-phase workflow: context detection then domain checks. Evidence-first findings with BLOCKER/HIGH/MEDIUM/LOW severity and AUDIT PASSED / AUDIT FAILED verdict.
 
