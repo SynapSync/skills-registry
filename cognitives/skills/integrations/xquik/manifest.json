@@ -1,0 +1,38 @@
+{
+  "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
+  "name": "xquik",
+  "type": "skill",
+  "version": "1.0.0",
+  "description": "Use Xquik for X/Twitter search, profiles, followers, media, monitors, and MCP",
+  "author": {
+    "name": "Xquik-dev",
+    "url": "https://github.com/Xquik-dev"
+  },
+  "license": "MIT",
+  "category": "integrations",
+  "tags": [
+    "x",
+    "twitter",
+    "social-media",
+    "mcp",
+    "api",
+    "monitoring"
+  ],
+  "providers": [
+    "claude",
+    "openai",
+    "cursor",
+    "windsurf",
+    "copilot",
+    "gemini",
+    "codex"
+  ],
+  "file": "SKILL.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Xquik-dev/x-twitter-scraper"
+  },
+  "homepage": "https://docs.xquik.com",
+  "createdAt": "2026-06-20T17:28:30Z",
+  "updatedAt": "2026-06-20T17:28:30Z"
+}
