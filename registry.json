@@ -1,8 +1,8 @@
 {
   "$schema": "https://synapsync.dev/schemas/registry.json",
   "version": "2.1.0",
-  "lastUpdated": "2026-06-19T00:00:00Z",
-  "totalCognitives": 10,
+  "lastUpdated": "2026-06-20T17:28:30Z",
+  "totalCognitives": 11,
   "cognitives": [
     {
       "name": "skill-creator",
@@ -109,7 +109,7 @@
       "name": "project-brain",
       "type": "skill",
       "version": "2.9.0",
-      "description": "Session memory for AI agents — load context, save sessions, evolve knowledge",
+      "description": "Session memory for AI agents - load context, save sessions, evolve knowledge",
       "author": "synapsync",
       "category": "workflow",
       "tags": [
@@ -273,6 +273,33 @@
       ],
       "downloads": 0,
       "path": "cognitives/skills/workflow/ad3c-cycle"
+    },
+    {
+      "name": "xquik",
+      "type": "skill",
+      "version": "1.0.0",
+      "description": "Use Xquik for X/Twitter search, profiles, followers, media, monitors, and MCP",
+      "author": "xquik-dev",
+      "category": "integrations",
+      "tags": [
+        "x",
+        "twitter",
+        "social-media",
+        "mcp",
+        "api",
+        "monitoring"
+      ],
+      "providers": [
+        "claude",
+        "openai",
+        "cursor",
+        "windsurf",
+        "copilot",
+        "gemini",
+        "codex"
+      ],
+      "downloads": 0,
+      "path": "cognitives/skills/integrations/xquik"
     }
   ]
 }
