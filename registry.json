@@ -1,8 +1,8 @@
 {
   "$schema": "https://synapsync.dev/schemas/registry.json",
   "version": "2.1.0",
-  "lastUpdated": "2026-06-19T00:00:00Z",
-  "totalCognitives": 10,
+  "lastUpdated": "2026-06-21T00:00:00Z",
+  "totalCognitives": 11,
   "cognitives": [
     {
       "name": "skill-creator",
@@ -273,6 +273,34 @@
       ],
       "downloads": 0,
       "path": "cognitives/skills/workflow/ad3c-cycle"
+    },
+    {
+      "name": "hermes-tweet",
+      "type": "skill",
+      "version": "0.1.6",
+      "description": "Hermes Agent X/Twitter plugin guidance with gated read and action workflows",
+      "author": "Xquik",
+      "category": "integrations",
+      "tags": [
+        "hermes-agent",
+        "twitter",
+        "x",
+        "social-media",
+        "plugin",
+        "automation",
+        "read-workflows"
+      ],
+      "providers": [
+        "claude",
+        "openai",
+        "cursor",
+        "windsurf",
+        "copilot",
+        "gemini",
+        "codex"
+      ],
+      "downloads": 0,
+      "path": "cognitives/skills/integrations/hermes-tweet"
     }
   ]
 }
