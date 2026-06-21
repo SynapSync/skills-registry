@@ -1,0 +1,53 @@
+{
+  "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
+  "name": "hermes-tweet",
+  "type": "skill",
+  "version": "0.1.6",
+  "description": "Hermes Agent X/Twitter plugin guidance with gated read and action workflows",
+  "author": {
+    "name": "Xquik",
+    "url": "https://github.com/Xquik-dev/hermes-tweet",
+    "email": ""
+  },
+  "license": "MIT",
+  "category": "integrations",
+  "tags": [
+    "hermes-agent",
+    "twitter",
+    "x",
+    "social-media",
+    "plugin",
+    "automation",
+    "read-workflows"
+  ],
+  "providers": [
+    "claude",
+    "openai",
+    "cursor",
+    "windsurf",
+    "copilot",
+    "gemini",
+    "codex"
+  ],
+  "file": "SKILL.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Xquik-dev/hermes-tweet"
+  },
+  "homepage": "https://github.com/Xquik-dev/hermes-tweet",
+  "assets": {
+    "total": 0,
+    "files": []
+  },
+  "changelog": [
+    {
+      "version": "0.1.6",
+      "date": "2026-06-21",
+      "changes": [
+        "Initial SynapSync registry entry for Hermes Tweet"
+      ]
+    }
+  ],
+  "createdAt": "2026-06-21T00:00:00Z",
+  "updatedAt": "2026-06-21T00:00:00Z"
+}

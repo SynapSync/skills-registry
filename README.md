@@ -60,6 +60,7 @@ synapse-registry/
 | [dead-code-auditor](cognitives/skills/analytics/dead-code-auditor/) | analytics | 1.0.0 | Surgical dead code audit: orphan files, unused symbols, dead params, and commented-out code |
 | [code-analyzer](cognitives/skills/analytics/code-analyzer/) | analytics | 2.7.0 | Analyzes code modules and generates structured technical reports with architecture diagrams |
 | [obsidian](cognitives/skills/integrations/obsidian/) | integrations | 4.1.0 | Unified Obsidian vault manager: sync documents, read notes, and search knowledge |
+| [hermes-tweet](cognitives/skills/integrations/hermes-tweet/) | integrations | 0.1.6 | Hermes Agent X/Twitter plugin guidance with gated read and action workflows |
 | [project-brain](cognitives/skills/workflow/project-brain/) | workflow | 2.9.0 | Session memory for AI agents — load context, save sessions, evolve knowledge |
 | [ad3c-cycle](cognitives/skills/workflow/ad3c-cycle/) | workflow | 1.0.0 | Per-task implementation micro-cycle: Analyze, Develop, Certify, Correct, Close |
 | [growth-ceo](cognitives/skills/planning/growth-ceo/) | planning | 2.1.0 | Elite tech CEO strategist: first principles, 7 Powers, flywheels, and billion-dollar-scale thinking |
