@@ -1,8 +1,8 @@
 {
   "$schema": "https://synapsync.dev/schemas/registry.json",
   "version": "2.1.0",
-  "lastUpdated": "2026-06-19T00:00:00Z",
-  "totalCognitives": 10,
+  "lastUpdated": "2026-07-29T00:00:00Z",
+  "totalCognitives": 11,
   "cognitives": [
     {
       "name": "skill-creator",
@@ -273,6 +273,35 @@
       ],
       "downloads": 0,
       "path": "cognitives/skills/workflow/ad3c-cycle"
+    },
+    {
+      "name": "kyro-sprint-executor",
+      "type": "skill",
+      "version": "1.0.0",
+      "description": "Strict Kyro sprint execution: context-pack -> implement -> validate -> record-evidence -> review",
+      "author": "joicodev",
+      "category": "workflow",
+      "tags": [
+        "kyro",
+        "sprint",
+        "execution",
+        "workflow",
+        "task-management",
+        "validation",
+        "verification",
+        "quality-gate"
+      ],
+      "providers": [
+        "claude",
+        "openai",
+        "cursor",
+        "windsurf",
+        "copilot",
+        "gemini",
+        "codex"
+      ],
+      "downloads": 0,
+      "path": "cognitives/skills/workflow/kyro-sprint-executor"
     }
   ]
 }

@@ -9,6 +9,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and th
 ## [Unreleased]
 
 ### Added
+- **kyro-sprint-executor** skill (workflow, v1.0.0): Strict Kyro sprint execution with mandatory per-task workflow: context-pack, implement, validate, record-evidence, review. Advancement rules with verdict pass/fail and failure recovery protocol. Sprint closure via official close-sprint command. Critical restrictions to protect Kyro-managed state.
 - **ad3c-cycle** skill (workflow, v1.0.0): Per-task implementation micro-cycle — Analyze, Develop, Certify, Correct, Close. Language-agnostic QA checklists for TypeScript, Python, Go, Rust, shell, JSON, and YAML. Correction loop with 3-iteration escalation rule and evidence format for task tracking integration.
 
 ### Added
