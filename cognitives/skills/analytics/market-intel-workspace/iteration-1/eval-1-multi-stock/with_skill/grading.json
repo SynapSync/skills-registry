@@ -1,0 +1,15 @@
+{
+  "eval_id": 1,
+  "run_type": "with_skill",
+  "expectations": [
+    {"text": "Report contains real-time price data (not from training data)", "passed": true, "evidence": "MSFT $356.77, GOOG $273.50, META $533.84. Specific quarterly financials for all three."},
+    {"text": "Includes probability-weighted scenario modeling (bull/base/bear with percentages summing to ~100%)", "passed": true, "evidence": "All three stocks have explicit probabilities: MSFT (30/50/20), GOOG (25/50/25), META (20/45/35). All sum to 100%."},
+    {"text": "Provides a clear, decisive verdict for each stock", "passed": true, "evidence": "MSFT: STRONG BUY (4/5), GOOG: BUY (3.5/5), META: BUY with caveats (2.5/5)."},
+    {"text": "Includes specific entry zones and stop-loss levels", "passed": true, "evidence": "MSFT: entry $355-360, stop $330. GOOG: entry $270-275, stop $240. META: entry $480-500, stop $460."},
+    {"text": "Cites sources (URLs or named publications)", "passed": true, "evidence": "21 specific URLs cited across multiple sources."},
+    {"text": "Calculates expected value from scenarios", "passed": true, "evidence": "MSFT EV: +17.9%, GOOG EV: +16.75%, META EV: +6.75%. All with explicit calculations shown."},
+    {"text": "Includes a portfolio summary with relative ranking", "passed": true, "evidence": "Full portfolio summary table + ranked list: 1. MSFT, 2. GOOG, 3. META by risk-adjusted EV."},
+    {"text": "Provides allocation percentages across the three stocks", "passed": true, "evidence": "MSFT 50%, GOOG 35%, META 15%. With rationale for each allocation."}
+  ],
+  "pass_rate": 1.0
+}

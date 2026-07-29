@@ -1,0 +1,15 @@
+{
+  "eval_id": 0,
+  "run_type": "with_skill",
+  "expectations": [
+    {"text": "Report contains real-time price data (not from training data)", "passed": true, "evidence": "Price stated as $167.52 with specific Q4 FY26 earnings ($68.1B revenue). Dates and figures match current market data."},
+    {"text": "Includes probability-weighted scenario modeling (bull/base/bear with percentages summing to ~100%)", "passed": true, "evidence": "Bull 30% + Base 50% + Bear 20% = 100%. Each scenario has specific catalysts and price targets."},
+    {"text": "Provides a clear, decisive verdict (STRONG BUY/BUY/HOLD/WAIT/AVOID)", "passed": true, "evidence": "Verdict: BUY with confidence 4/5. Single decisive rating."},
+    {"text": "Includes specific entry zones and stop-loss levels", "passed": true, "evidence": "Three-tranche entry strategy: $165-170 (40%), $150-155 (30%), $180+ (30%). Hard stop at $130. Thesis-based exit criteria also specified."},
+    {"text": "Cites sources (URLs or named publications)", "passed": true, "evidence": "17 specific URLs cited including NVIDIA earnings releases, CNBC, MarketBeat, SEC Form 4, Motley Fool."},
+    {"text": "Calculates expected value from scenarios", "passed": true, "evidence": "EV = (0.30 x +43%) + (0.50 x +14.5%) + (0.20 x -19%) = +16.35%. Asymmetry ratio: 2.3:1."},
+    {"text": "Includes position sizing guidance (core/tactical/speculative with %)", "passed": true, "evidence": "Core Position (40-60% of allocation budget). Up to 8-10% of diversified equity portfolio."},
+    {"text": "Analysis is specific and actionable, not generic commentary", "passed": true, "evidence": "Specific PEG ratio (0.3x), forward P/E at S&P parity, $78B guidance, CUDA ecosystem analysis, tranche entry strategy, thesis-based stop criteria."}
+  ],
+  "pass_rate": 1.0
+}

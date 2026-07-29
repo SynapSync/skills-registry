@@ -1,0 +1,47 @@
+{
+  "skill_name": "market-intel",
+  "iteration": 1,
+  "configurations": [
+    {
+      "name": "with_skill",
+      "label": "With Market Intel Skill",
+      "results": {
+        "pass_rate": {"mean": 1.0, "stddev": 0.0},
+        "tokens": {"mean": 44712, "stddev": 6453},
+        "duration_seconds": {"mean": 222.9, "stddev": 42.7}
+      },
+      "per_eval": [
+        {"eval_name": "single-stock-deep-dive", "pass_rate": 1.0, "tokens": 40946, "duration_seconds": 235.3},
+        {"eval_name": "multi-stock-ai-comparison", "pass_rate": 1.0, "tokens": 52570, "duration_seconds": 299.3},
+        {"eval_name": "daily-scan-capital-deployment", "pass_rate": 1.0, "tokens": 41120, "duration_seconds": 216.8}
+      ]
+    },
+    {
+      "name": "without_skill",
+      "label": "Without Skill (Baseline)",
+      "results": {
+        "pass_rate": {"mean": 0.375, "stddev": 0.125},
+        "tokens": {"mean": 28043, "stddev": 1288},
+        "duration_seconds": {"mean": 141.7, "stddev": 7.8}
+      },
+      "per_eval": [
+        {"eval_name": "single-stock-deep-dive", "pass_rate": 0.25, "tokens": 29749, "duration_seconds": 150.6},
+        {"eval_name": "multi-stock-ai-comparison", "pass_rate": 0.375, "tokens": 26980, "duration_seconds": 136.6},
+        {"eval_name": "daily-scan-capital-deployment", "pass_rate": 0.5, "tokens": 27401, "duration_seconds": 137.8}
+      ]
+    }
+  ],
+  "delta": {
+    "pass_rate": "+62.5 percentage points (0.375 → 1.0)",
+    "tokens": "+59.4% more tokens (28,043 → 44,712)",
+    "duration": "+57.3% longer (141.7s → 222.9s)"
+  },
+  "analyst_observations": [
+    "The skill achieves 100% pass rate across all 3 evals vs 37.5% baseline — a +62.5pp improvement.",
+    "The biggest discriminating assertions are: probability-weighted scenarios (0% baseline → 100% skill), EV calculations (0% → 100%), and position sizing guidance (0% → 100%). These are the skill's core value-add.",
+    "Real-time data fetching and source citations pass in both conditions — Claude already does this well without the skill. These are non-discriminating assertions.",
+    "The skill costs ~60% more tokens and time. This is expected: it runs 7 analysis modules with parallel web searches. The quality improvement justifies the cost for investment analysis.",
+    "The baseline multi-stock report (eval-1) picked GOOG as the best play; the skill picked MSFT. Both used real data but reached different conclusions because the skill's EV framework penalized META's legal risk more heavily.",
+    "The skill's 'Hidden Opportunities' section consistently delivers value — surface-level analysis misses these entirely."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "skill_name": "market-intel",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Analyze NVDA for me — is it still worth buying at these levels after the recent AI spending concerns?",
+      "expected_output": "A comprehensive single-stock report with real-time data, scenario modeling with probabilities, and a clear verdict with entry zones",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "Compare MSFT, GOOG, and META — which is the best AI play right now for a 6-month position?",
+      "expected_output": "Three individual reports plus a portfolio summary with relative ranking and allocation recommendation",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "What's looking interesting in the market today? I have $50k to deploy.",
+      "expected_output": "A market scan with 3-5 specific opportunities, each with a mini-analysis and allocation suggestion for the $50k budget",
+      "files": []
+    }
+  ]
+}

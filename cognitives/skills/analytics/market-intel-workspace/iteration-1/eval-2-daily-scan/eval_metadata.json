@@ -1,0 +1,15 @@
+{
+  "eval_id": 2,
+  "eval_name": "daily-scan-capital-deployment",
+  "prompt": "What's looking interesting in the market today? I have $50k to deploy.",
+  "assertions": [
+    {"text": "Report contains real-time price data (not from training data)", "type": "quality"},
+    {"text": "Identifies 3+ specific stock opportunities with tickers", "type": "quality"},
+    {"text": "Provides dollar allocation for the $50k budget", "type": "quality"},
+    {"text": "Includes risk assessment for each opportunity", "type": "quality"},
+    {"text": "Cites sources (URLs or named publications)", "type": "quality"},
+    {"text": "Includes macro context for current market conditions", "type": "quality"},
+    {"text": "Each opportunity has a clear thesis (not just 'looks good')", "type": "quality"},
+    {"text": "Includes hidden opportunities / bonus picks section", "type": "quality"}
+  ]
+}

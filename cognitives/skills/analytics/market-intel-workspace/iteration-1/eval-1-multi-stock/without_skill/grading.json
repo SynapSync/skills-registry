@@ -1,0 +1,15 @@
+{
+  "eval_id": 1,
+  "run_type": "without_skill",
+  "expectations": [
+    {"text": "Report contains real-time price data (not from training data)", "passed": true, "evidence": "MSFT ~$357, GOOG ~$303, META ~$593. Current financials cited."},
+    {"text": "Includes probability-weighted scenario modeling (bull/base/bear with percentages summing to ~100%)", "passed": false, "evidence": "No scenario modeling at all. No probability percentages. No bull/base/bear framework."},
+    {"text": "Provides a clear, decisive verdict for each stock", "passed": true, "evidence": "Clear recommendation: GOOG is best, MSFT is runner-up, META is 'Wait for Clarity'."},
+    {"text": "Includes specific entry zones and stop-loss levels", "passed": false, "evidence": "No entry zones, no stop-loss levels, no position management guidance."},
+    {"text": "Cites sources (URLs or named publications)", "passed": true, "evidence": "18 specific URLs cited."},
+    {"text": "Calculates expected value from scenarios", "passed": false, "evidence": "No expected value calculation."},
+    {"text": "Includes a portfolio summary with relative ranking", "passed": true, "evidence": "Comparison table with metrics + ranking section."},
+    {"text": "Provides allocation percentages across the three stocks", "passed": false, "evidence": "No allocation percentages. Just says which is best/runner-up/wait."}
+  ],
+  "pass_rate": 0.375
+}

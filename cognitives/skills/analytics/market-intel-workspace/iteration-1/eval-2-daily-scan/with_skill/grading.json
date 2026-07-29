@@ -1,0 +1,15 @@
+{
+  "eval_id": 2,
+  "run_type": "with_skill",
+  "expectations": [
+    {"text": "Report contains real-time price data (not from training data)", "passed": true, "evidence": "MSFT $372.74, ADBE $236.24, CEG $282.00, VIX 30.6, oil $113+. All current."},
+    {"text": "Identifies 3+ specific stock opportunities with tickers", "passed": true, "evidence": "4 opportunities: MSFT, ADBE, CEG, COP/XLE + cash reserve."},
+    {"text": "Provides dollar allocation for the $50k budget", "passed": true, "evidence": "$20K MSFT (40%), $12.5K ADBE (25%), $10K CEG (20%), $5K COP (10%), $2.5K cash (5%)."},
+    {"text": "Includes risk assessment for each opportunity", "passed": true, "evidence": "Each has stop-loss levels, confidence ratings, and risk factors. MSFT stop $310, ADBE stop $185, CEG stop $210."},
+    {"text": "Cites sources (URLs or named publications)", "passed": true, "evidence": "25+ URLs cited across multiple financial sources."},
+    {"text": "Includes macro context for current market conditions", "passed": true, "evidence": "Full macro section covering Fed rates (3.50-3.75%), Iran conflict, oil shock, VIX, sector rotation, economic cycle."},
+    {"text": "Each opportunity has a clear thesis (not just 'looks good')", "passed": true, "evidence": "MSFT: 'oversold RSI 27.68, 59% analyst upside'. ADBE: 'decade-low 14x P/E, CEO buying, AI ARR tripling'. CEG: 'nuclear-AI PPAs, 60GW fleet'. Each thesis is specific."},
+    {"text": "Includes hidden opportunities / bonus picks section", "passed": true, "evidence": "Three hidden opportunities: MU ($444, HBM supercycle), BORR ($5.73, insider buying), GPRE ($16.89, technical breakout)."}
+  ],
+  "pass_rate": 1.0
+}

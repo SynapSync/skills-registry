@@ -30,6 +30,7 @@ Sprint / Feature (macro-cycle)
 ## When to use this cycle
 
 Use AD3C for every implementation task that touches 2+ files or involves a design decision. The cycle is designed for:
+
 - Feature implementation within a sprint
 - Bug fixes that require code changes
 - Refactors with risk of regression
@@ -57,15 +58,15 @@ One coherent intention per task:
 
 Mandatory quality gate. Run all relevant checks on the changed code:
 
-| File type | Check |
-|-----------|-------|
-| TypeScript / JavaScript | Typecheck (`tsc --noEmit`), linter on changed files |
-| Python | Typecheck (`mypy` or `pyright`), linter (`ruff`, `flake8`) |
-| Go | `go vet`, `go build ./...` |
-| Rust | `cargo check`, `clippy` |
-| Shell scripts | `bash -n`, `shellcheck` |
-| JSON / YAML | Schema validation |
-| General | Unit tests for changed code |
+| File type               | Check                                                      |
+| ----------------------- | ---------------------------------------------------------- |
+| TypeScript / JavaScript | Typecheck (`tsc --noEmit`), linter on changed files        |
+| Python                  | Typecheck (`mypy` or `pyright`), linter (`ruff`, `flake8`) |
+| Go                      | `go vet`, `go build ./...`                                 |
+| Rust                    | `cargo check`, `clippy`                                    |
+| Shell scripts           | `bash -n`, `shellcheck`                                    |
+| JSON / YAML             | Schema validation                                          |
+| General                 | Unit tests for changed code                                |
 
 Record concrete evidence — the actual command output, not "seems fine".
 
@@ -90,13 +91,13 @@ Checkpoint and move to the next task:
 
 ## When to relax the cycle
 
-| Situation | Action |
-|-----------|--------|
-| 1 file, 1 line change | ANALYZE and DEVELOP collapse. Start from CERTIFY |
-| Mechanical refactor (rename, move) | Quick ANALYZE, mechanical DEVELOP, CERTIFY + CLOSE |
-| Exploration / spike | No meaningful CERTIFY. Mark as `[~]`, checkpoint without commit |
-| CERTIFY takes more than 30 seconds | Run the fastest meaningful check. Commit — the full build runs in CI |
-| Task touches 5+ files | Split it into smaller tasks first. If unsplittable, checkpoint per file |
+| Situation                          | Action                                                                  |
+| ---------------------------------- | ----------------------------------------------------------------------- |
+| 1 file, 1 line change              | ANALYZE and DEVELOP collapse. Start from CERTIFY                        |
+| Mechanical refactor (rename, move) | Quick ANALYZE, mechanical DEVELOP, CERTIFY + CLOSE                      |
+| Exploration / spike                | No meaningful CERTIFY. Mark as `[~]`, checkpoint without commit         |
+| CERTIFY takes more than 30 seconds | Run the fastest meaningful check. Commit — the full build runs in CI    |
+| Task touches 5+ files              | Split it into smaller tasks first. If unsplittable, checkpoint per file |
 
 ## Evidence format
 

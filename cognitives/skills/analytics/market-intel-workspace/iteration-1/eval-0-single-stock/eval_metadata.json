@@ -1,0 +1,15 @@
+{
+  "eval_id": 0,
+  "eval_name": "single-stock-deep-dive",
+  "prompt": "Analyze NVDA for me — is it still worth buying at these levels after the recent AI spending concerns?",
+  "assertions": [
+    {"text": "Report contains real-time price data (not from training data)", "type": "quality"},
+    {"text": "Includes probability-weighted scenario modeling (bull/base/bear with percentages summing to ~100%)", "type": "quality"},
+    {"text": "Provides a clear, decisive verdict (STRONG BUY/BUY/HOLD/WAIT/AVOID)", "type": "quality"},
+    {"text": "Includes specific entry zones and stop-loss levels", "type": "quality"},
+    {"text": "Cites sources (URLs or named publications)", "type": "quality"},
+    {"text": "Calculates expected value from scenarios", "type": "quality"},
+    {"text": "Includes position sizing guidance (core/tactical/speculative with %)", "type": "quality"},
+    {"text": "Analysis is specific and actionable, not generic commentary", "type": "quality"}
+  ]
+}

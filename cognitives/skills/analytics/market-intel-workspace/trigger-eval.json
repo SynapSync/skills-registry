@@ -1,0 +1,22 @@
+[
+  {"query": "hey so I've been watching $NVDA for a while and it just dropped like 15% from its highs — my buddy says it's a no-brainer buy but idk, the whole AI spending thing has me worried. Can you take a deep look and tell me if I should get in here or wait?", "should_trigger": true},
+  {"query": "Compare MSFT, GOOG, and META as AI plays. I have about $30k to put into one or split between them, 6-month horizon. Which gives me the best risk/reward right now?", "should_trigger": true},
+  {"query": "que esta pasando con el mercado hoy? tengo 50k para invertir y no se donde meterlos, dame ideas concretas con porcentajes de alocacion", "should_trigger": true},
+  {"query": "I just inherited $200k and my financial advisor says to put it all in index funds but I want to pick some individual stocks too. Can you analyze AAPL, AMZN, and TSLA for me? I'm thinking long-term, like 5+ years", "should_trigger": true},
+  {"query": "PLTR earnings are tomorrow. What's the setup look like? I'm trying to decide if I should hold my calls through earnings or sell before the report", "should_trigger": true},
+  {"query": "is the energy sector still a good play with oil above $100? specifically looking at XOM and COP, already have a small position in DVN", "should_trigger": true},
+  {"query": "my portfolio is down 12% this month and I'm freaking out a bit. I hold NVDA, MSFT, META, AAPL, and some SCHD. Should I be rebalancing or just riding it out?", "should_trigger": true},
+  {"query": "I keep hearing about this rotation from growth into value — is that real? What sectors should I be looking at and what should I avoid for the next quarter?", "should_trigger": true},
+  {"query": "dime si BABA esta barata o es una trampa de valor. Los numeros se ven bien pero me da miedo el riesgo regulatorio de China", "should_trigger": true},
+  {"query": "Daily scan — what are the top 3-5 most interesting setups in the market right now? I trade mostly large-cap US stocks, looking for entries this week", "should_trigger": true},
+  {"query": "I need to build a stock screener in Python that filters by P/E ratio, market cap, and moving average crossovers. Can you help me write the code using yfinance?", "should_trigger": false},
+  {"query": "Can you explain how the Kelly criterion works for position sizing? I'm building a prediction model and want to understand the math behind optimal bet sizing", "should_trigger": false},
+  {"query": "I'm writing a research paper on market microstructure and need to understand how order flow impacts price discovery in limit order books. Can you explain the theory?", "should_trigger": false},
+  {"query": "help me set up a PostgreSQL database schema for storing historical OHLCV price data with proper indexing for time-series queries", "should_trigger": false},
+  {"query": "What's the difference between a t-test and a Mann-Whitney U test? I'm trying to figure out which one to use for comparing two groups of stock returns", "should_trigger": false},
+  {"query": "I need to backtest a moving average crossover strategy on BTC/USD using walk-forward validation. What's the proper methodology to avoid overfitting?", "should_trigger": false},
+  {"query": "Can you review my React dashboard component? It's supposed to display a stock portfolio table with sorting and filtering but the state management is buggy", "should_trigger": false},
+  {"query": "Explain how GARCH models work for volatility forecasting. I want to implement one in Python for my crypto trading bot but I don't understand the math yet", "should_trigger": false},
+  {"query": "I'm trying to deploy a FastAPI app that serves ML predictions for stock prices. Getting a 502 error on my EC2 instance — can you help debug?", "should_trigger": false},
+  {"query": "What are the tax implications of wash sales if I sell AAPL at a loss and buy it back within 30 days? I'm trying to do some tax loss harvesting before year end", "should_trigger": false}
+]

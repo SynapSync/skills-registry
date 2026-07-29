@@ -1,0 +1,15 @@
+{
+  "eval_id": 2,
+  "run_type": "without_skill",
+  "expectations": [
+    {"text": "Report contains real-time price data (not from training data)", "passed": true, "evidence": "S&P 6,343.72, VIX 30.61, WTI $102.88, Brent ~$116, Bitcoin $66,694.59. All current."},
+    {"text": "Identifies 3+ specific stock opportunities with tickers", "passed": true, "evidence": "Multiple tickers across sectors: XOM, DVN, NVDA, MU, ADBE, VZ, LMT, etc."},
+    {"text": "Provides dollar allocation for the $50k budget", "passed": true, "evidence": "$12.5K energy (25%), $7.5K defense (15%), $20K tech (40%), $7.5K defensive income (15%), $2.5K cash (5%)."},
+    {"text": "Includes risk assessment for each opportunity", "passed": false, "evidence": "General sector risk commentary but no stock-specific risk levels, no stop-losses, no individual risk assessments."},
+    {"text": "Cites sources (URLs or named publications)", "passed": true, "evidence": "20+ URLs cited."},
+    {"text": "Includes macro context for current market conditions", "passed": true, "evidence": "Detailed macro section on Iran war, oil shock, sector heat map, VIX analysis."},
+    {"text": "Each opportunity has a clear thesis (not just 'looks good')", "passed": false, "evidence": "Thesis per stock is brief (1 line in a table). E.g., NVDA: 'FV est. $260. AI infrastructure backbone.' — generic, not analytical."},
+    {"text": "Includes hidden opportunities / bonus picks section", "passed": false, "evidence": "Has an 'International Radar' section but it's not positioned as hidden opportunities. No domestic hidden picks."}
+  ],
+  "pass_rate": 0.5
+}

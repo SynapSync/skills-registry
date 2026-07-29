@@ -1,0 +1,15 @@
+{
+  "eval_id": 0,
+  "run_type": "without_skill",
+  "expectations": [
+    {"text": "Report contains real-time price data (not from training data)", "passed": true, "evidence": "Price stated as $167.52/$168.53 pre-market. Specific Q4 FY26 earnings data. ATH of $207.02."},
+    {"text": "Includes probability-weighted scenario modeling (bull/base/bear with percentages summing to ~100%)", "passed": false, "evidence": "Has bull case ($250-$325) and bear case ($120-$140) but NO explicit probability percentages. No probability-weighted framework."},
+    {"text": "Provides a clear, decisive verdict (STRONG BUY/BUY/HOLD/WAIT/AVOID)", "passed": false, "evidence": "Verdict is split by investor profile: 'Accumulate' for long-term, 'Cautious Buy/Scale In' for medium-term, 'Wait' for short-term. No single decisive verdict."},
+    {"text": "Includes specific entry zones and stop-loss levels", "passed": false, "evidence": "Mentions support at $164 and 200-day MA at $179 as levels to watch, and suggests tranches ($168/$160/$150/$140), but no explicit stop-loss level."},
+    {"text": "Cites sources (URLs or named publications)", "passed": true, "evidence": "18 specific URLs cited from CNBC, Fortune, Seeking Alpha, MacroTrends, TipRanks, etc."},
+    {"text": "Calculates expected value from scenarios", "passed": false, "evidence": "No expected value calculation. No probability-weighted return estimate."},
+    {"text": "Includes position sizing guidance (core/tactical/speculative with %)", "passed": false, "evidence": "Mentions 5-8% of portfolio and scaling tranches, but no core/tactical/speculative classification."},
+    {"text": "Analysis is specific and actionable, not generic commentary", "passed": false, "evidence": "Good data but hedges every recommendation by investor type. Executive summary says 'On balance, NVDA presents a favorable risk/reward for long-term investors willing to tolerate near-term volatility' — classic hedging language."}
+  ],
+  "pass_rate": 0.25
+}

@@ -1,0 +1,15 @@
+{
+  "eval_id": 1,
+  "eval_name": "multi-stock-ai-comparison",
+  "prompt": "Compare MSFT, GOOG, and META — which is the best AI play right now for a 6-month position?",
+  "assertions": [
+    {"text": "Report contains real-time price data (not from training data)", "type": "quality"},
+    {"text": "Includes probability-weighted scenario modeling (bull/base/bear with percentages summing to ~100%)", "type": "quality"},
+    {"text": "Provides a clear, decisive verdict for each stock", "type": "quality"},
+    {"text": "Includes specific entry zones and stop-loss levels", "type": "quality"},
+    {"text": "Cites sources (URLs or named publications)", "type": "quality"},
+    {"text": "Calculates expected value from scenarios", "type": "quality"},
+    {"text": "Includes a portfolio summary with relative ranking", "type": "quality"},
+    {"text": "Provides allocation percentages across the three stocks", "type": "quality"}
+  ]
+}
