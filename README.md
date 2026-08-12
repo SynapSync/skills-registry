@@ -60,6 +60,7 @@ synapse-registry/
 | [dead-code-auditor](cognitives/skills/analytics/dead-code-auditor/) | analytics | 1.0.0 | Surgical dead code audit: orphan files, unused symbols, dead params, and commented-out code |
 | [code-analyzer](cognitives/skills/analytics/code-analyzer/) | analytics | 2.7.0 | Analyzes code modules and generates structured technical reports with architecture diagrams |
 | [obsidian](cognitives/skills/integrations/obsidian/) | integrations | 4.1.0 | Unified Obsidian vault manager: sync documents, read notes, and search knowledge |
+| [xquik](cognitives/skills/integrations/xquik/) | integrations | 1.0.0 | Use Xquik MCP and REST for X/Twitter research and confirmed actions |
 | [project-brain](cognitives/skills/workflow/project-brain/) | workflow | 2.9.0 | Session memory for AI agents — load context, save sessions, evolve knowledge |
 | [ad3c-cycle](cognitives/skills/workflow/ad3c-cycle/) | workflow | 1.0.0 | Per-task implementation micro-cycle: Analyze, Develop, Certify, Correct, Close |
 | [kyro-sprint-executor](cognitives/skills/workflow/kyro-sprint-executor/) | workflow | 1.0.0 | Strict Kyro sprint execution with mandatory per-task workflow and verification gates |

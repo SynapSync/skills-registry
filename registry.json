@@ -275,6 +275,33 @@
       "path": "cognitives/skills/workflow/ad3c-cycle"
     },
     {
+      "name": "xquik",
+      "type": "skill",
+      "version": "1.0.0",
+      "description": "Use Xquik MCP and REST for X/Twitter research and confirmed actions. Trigger: X/Twitter work.",
+      "author": "Xquik",
+      "category": "integrations",
+      "tags": [
+        "x-twitter",
+        "social-data",
+        "mcp",
+        "rest-api",
+        "research",
+        "automation"
+      ],
+      "providers": [
+        "claude",
+        "openai",
+        "cursor",
+        "windsurf",
+        "copilot",
+        "gemini",
+        "codex"
+      ],
+      "downloads": 0,
+      "path": "cognitives/skills/integrations/xquik"
+    },
+    {
       "name": "kyro-sprint-executor",
       "type": "skill",
       "version": "1.0.0",
