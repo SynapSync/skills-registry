@@ -275,6 +275,32 @@
       "path": "cognitives/skills/workflow/ad3c-cycle"
     },
     {
+      "name": "hermes-tweet",
+      "type": "skill",
+      "version": "1.0.0",
+      "description": "Run Hermes Tweet research and gated X/Twitter actions in Hermes Agent. Trigger: Hermes workflows.",
+      "author": "Xquik",
+      "category": "integrations",
+      "tags": [
+        "hermes-agent",
+        "x-twitter",
+        "xquik",
+        "monitoring",
+        "automation"
+      ],
+      "providers": [
+        "claude",
+        "openai",
+        "cursor",
+        "windsurf",
+        "copilot",
+        "gemini",
+        "codex"
+      ],
+      "downloads": 0,
+      "path": "cognitives/skills/integrations/hermes-tweet"
+    },
+    {
       "name": "kyro-sprint-executor",
       "type": "skill",
       "version": "1.0.0",

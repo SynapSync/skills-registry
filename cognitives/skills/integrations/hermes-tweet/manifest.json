@@ -1,0 +1,51 @@
+{
+  "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
+  "name": "hermes-tweet",
+  "type": "skill",
+  "version": "1.0.0",
+  "description": "Run Hermes Tweet research and gated X/Twitter actions in Hermes Agent. Trigger: Hermes workflows.",
+  "author": {
+    "name": "Xquik",
+    "url": "https://github.com/Xquik-dev/hermes-tweet",
+    "email": ""
+  },
+  "license": "MIT",
+  "category": "integrations",
+  "tags": [
+    "hermes-agent",
+    "x-twitter",
+    "xquik",
+    "monitoring",
+    "automation"
+  ],
+  "providers": [
+    "claude",
+    "openai",
+    "cursor",
+    "windsurf",
+    "copilot",
+    "gemini",
+    "codex"
+  ],
+  "file": "SKILL.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Xquik-dev/hermes-tweet"
+  },
+  "homepage": "https://github.com/Xquik-dev/hermes-tweet#readme",
+  "assets": {
+    "total": 0,
+    "files": []
+  },
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-08-12",
+      "changes": [
+        "Add source-backed Hermes Tweet setup, route discovery, and action-gate guidance"
+      ]
+    }
+  ],
+  "createdAt": "2026-08-12T00:00:00Z",
+  "updatedAt": "2026-08-12T00:00:00Z"
+}
