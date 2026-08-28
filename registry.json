@@ -1,8 +1,8 @@
 {
   "$schema": "https://synapsync.dev/schemas/registry.json",
   "version": "2.1.0",
-  "lastUpdated": "2026-07-29T00:00:00Z",
-  "totalCognitives": 11,
+  "lastUpdated": "2026-08-28T00:00:00Z",
+  "totalCognitives": 12,
   "cognitives": [
     {
       "name": "skill-creator",
@@ -302,6 +302,35 @@
       ],
       "downloads": 0,
       "path": "cognitives/skills/workflow/kyro-sprint-executor"
+    },
+    {
+      "name": "hol-guard",
+      "type": "skill",
+      "version": "1.0.0",
+      "description": "Installs HOL Guard to protect local AI harness tool execution and review policy decisions",
+      "author": "hashgraph-online",
+      "category": "security",
+      "tags": [
+        "hol-guard",
+        "ai-security",
+        "runtime-policy",
+        "tool-safety",
+        "agent-security",
+        "approvals",
+        "audit",
+        "local-first"
+      ],
+      "providers": [
+        "claude",
+        "openai",
+        "cursor",
+        "windsurf",
+        "copilot",
+        "gemini",
+        "codex"
+      ],
+      "downloads": 0,
+      "path": "cognitives/skills/security/hol-guard"
     }
   ]
 }
