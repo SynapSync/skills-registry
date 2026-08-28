@@ -64,6 +64,7 @@ synapse-registry/
 | [ad3c-cycle](cognitives/skills/workflow/ad3c-cycle/) | workflow | 1.0.0 | Per-task implementation micro-cycle: Analyze, Develop, Certify, Correct, Close |
 | [kyro-sprint-executor](cognitives/skills/workflow/kyro-sprint-executor/) | workflow | 1.0.0 | Strict Kyro sprint execution with mandatory per-task workflow and verification gates |
 | [growth-ceo](cognitives/skills/planning/growth-ceo/) | planning | 2.1.0 | Elite tech CEO strategist: first principles, 7 Powers, flywheels, and billion-dollar-scale thinking |
+| [hol-guard](cognitives/skills/security/hol-guard/) | security | 1.0.0 | Installs HOL Guard to protect local AI harness tool execution and review policy decisions |
 
 ### Agents
 
