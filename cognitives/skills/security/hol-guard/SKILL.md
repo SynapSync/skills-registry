@@ -38,13 +38,13 @@ Use this skill when the user wants to:
 
 ## Install and Detect
 
-Check for the CLI first:
+Check for the CLI with a cross-platform probe first:
 
 ```bash
-command -v hol-guard
+hol-guard --version
 ```
 
-If it is missing, prefer an isolated install:
+If that command is unavailable, prefer an isolated install:
 
 ```bash
 pipx install hol-guard
