@@ -85,10 +85,12 @@ When Guard blocks or queues an action, inspect the request and evidence first:
 
 ```bash
 hol-guard approvals
-hol-guard approvals open
+hol-guard approvals open <request-id>
 hol-guard receipts
 hol-guard diff <harness>
 ```
+
+Use the pending request identifier returned by `hol-guard approvals`; do not guess or reuse an unrelated request ID.
 
 For terminal-only resolution, use the request identifier returned by Guard:
 
