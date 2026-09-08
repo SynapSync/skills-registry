@@ -1,0 +1,55 @@
+{
+  "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
+  "name": "kyro-sprint-flow",
+  "type": "skill",
+  "version": "1.0.0",
+  "description": "Orchestrates Kyro sprint flow via executor/QA workers; follows Kyro next step",
+  "author": {
+    "name": "joicodev",
+    "url": "https://github.com/joicodev"
+  },
+  "license": "Apache-2.0",
+  "category": "workflow",
+  "tags": [
+    "kyro",
+    "sprint",
+    "orchestrator",
+    "workflow",
+    "subagent",
+    "qa",
+    "execution",
+    "quality-gate",
+    "delegation",
+    "next-step"
+  ],
+  "providers": [
+    "claude",
+    "openai",
+    "cursor",
+    "windsurf",
+    "copilot",
+    "gemini",
+    "codex"
+  ],
+  "file": "SKILL.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SynapSync/skills-registry"
+  },
+  "createdAt": "2026-09-08T00:00:00Z",
+  "updatedAt": "2026-09-08T00:00:00Z",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-08",
+      "changes": [
+        "Initial release: Kyro orchestrator skill that directs isolated executor, QA, and fix workers",
+        "Orchestrator never loads kyro-sprint-executor, kyro-task-context, or kyro-qa",
+        "Structured return contracts for executor and QA workers; flow state passed explicitly",
+        "User authorization gate before first QA; re-QA after fixes follows KYRO NEXT STEP",
+        "Fix Plan generated from QA findings; fix→QA loop capped at 3 rounds",
+        "State-guided routing via KYRO NEXT STEP rather than a hardcoded execute→QA→fix machine"
+      ]
+    }
+  ]
+}
