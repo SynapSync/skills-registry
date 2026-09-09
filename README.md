@@ -12,7 +12,7 @@ Use the `skills` CLI to install cognitives from any GitHub repository:
 
 ```bash
 # Install cognitives from a registry repo
-npx skills add owner/repo
+npx skills add https://github.com/SynapSync/skills-registry
 
 # Update installed cognitives
 npx skills update
