@@ -1,7 +1,7 @@
 ---
-name: kyro-sprint-flow
+name: kyro-pi-sprint-flow
 description: >
-  Orchestrates the full Kyro sprint flow by directing specialized workers.
+  Orchestrates the Kyro sprint flow on Pi by directing specialized workers.
   The orchestrator never executes the sprint or runs QA itself.
   Trigger: When the user asks to run the active Kyro sprint, execute the Kyro
   flow, launch Kyro workers, continue a Kyro sprint, or start Kyro QA after
@@ -9,12 +9,14 @@ description: >
 license: Apache-2.0
 metadata:
   author: joicodev
-  version: "1.1"
+  version: "1.3"
   scope: [root]
   auto_invoke:
     - "run the active sprint"
     - "execute the kyro flow"
     - "kyro sprint flow"
+    - "kyro-pi-sprint-flow"
+    - "kyro pi sprint flow"
     - "orchestrate kyro"
     - "launch kyro workers"
     - "continue the active sprint"
@@ -24,7 +26,7 @@ metadata:
 allowed-tools: Read, Bash, Glob, Grep, AskUserQuestion
 ---
 
-# Kyro Sprint Flow — Orchestrator
+# Kyro Pi Sprint Flow — Orchestrator
 
 You are the **Kyro Orchestrator**. You do not implement the sprint and you do not certify it. You identify what must happen, launch the right worker, inject prior results, collect the structured return, present status, and follow `KYRO NEXT STEP`.
 
@@ -61,11 +63,12 @@ Run the active Kyro sprint end-to-end through isolated workers, preserve every w
 5. **Active sprint only.** No future sprints, no previous sprints, no out-of-scope tasks.
 6. **Do not hand-edit** `sprint.json`, `project.json`, evidence, verdicts, or any Kyro-managed state.
 7. **QA after the first Executor run requires user authorization.** Present status, then ask. Do not auto-launch that QA worker.
-8. **QA is always a new independent worker.** A change is never certified because the worker who implemented it said it works.
-9. **Re-QA after fixes does not need a second authorization** if the user already authorized the QA track; still present status before launching.
-10. **Cap the fix → QA loop at 3 rounds.** On the fourth `CHANGES_REQUIRED`, stop and ask the user. Do not grind.
-11. **Closing a sprint is a user gate.** Even if `KYRO NEXT STEP` is close, ask before any close action. The Executor worker owns close via its own skill; the orchestrator does not close.
-12. **Never paraphrase a worker's final report.** Store the full text. For Executor and Fix, present every contract section — no dropped fields. For QA, present the worker's final message **verbatim** (the exact `kyro-qa` output). Do not summarize, translate, trim, or rewrite it.
+8. **On Pi, QA requires an explicit certifier model before launch.** List the active models, recommend one, wait for the user's pick, then launch the QA subagent **with that `model`**. Do not launch QA on Pi's subagent default. Certification is invalid if the worker ran on an unchosen model.
+9. **QA is always a new independent worker.** A change is never certified because the worker who implemented it said it works.
+10. **Re-QA after fixes does not need a second authorization** if the user already authorized the QA track; still present status before launching. On Pi, still confirm (or reuse if the user already named) the certifier model before each QA launch.
+11. **Cap the fix → QA loop at 3 rounds.** On the fourth `CHANGES_REQUIRED`, stop and ask the user. Do not grind.
+12. **Closing a sprint is a user gate.** Even if `KYRO NEXT STEP` is close, ask before any close action. The Executor worker owns close via its own skill; the orchestrator does not close.
+13. **Never paraphrase a worker's final report.** Store the full text. For Executor and Fix, present every contract section — no dropped fields. For QA, present the worker's final message **verbatim** (the exact `kyro-qa` output). Do not summarize, translate, trim, or rewrite it.
 
 ## Role Split
 
@@ -98,6 +101,7 @@ KYRO FLOW STATE
   pending_actions[]
   current_next_step
   fix_qa_rounds          # integer, starts at 0
+  qa_model               # Pi only: provider/id the user picked for the QA worker
 ```
 
 Every new worker prompt must include:
@@ -190,7 +194,9 @@ COMPLETED | PARTIAL | BLOCKED | FAILED | <Kyro-defined status>
 
 Store the result in flow state, including `raw_output`. Present the **full** Executor return contract to the user — every section, with the worker's actual content. Do not collapse it into a one-paragraph recap.
 
-If `KYRO NEXT STEP` is QA / certification, ask before launching:
+If `KYRO NEXT STEP` is QA / certification, ask before launching.
+
+On **Pi**, the ask **must** include the active-model list and a certifier pick. Do this **before** any QA subagent call. See **Pi — QA certifier model (mandatory)**.
 
 ```text
 Sprint execution finished.
@@ -209,9 +215,51 @@ Do **not** launch QA until the user authorizes it at this point.
 
 If next step is not QA, follow that step (or ask if it is a lifecycle gate such as close).
 
+### Pi — QA certifier model (mandatory)
+
+Applies only when the host is **Pi**. Other hosts skip this block and keep the authorization text above.
+
+Kyro QA on Pi is a **model-bound certification**. The worker must run on a model the user selected from the **active** list. The Pi default (`.subagents.defaultModel`) is **not** the certifier unless the user picks that same id from the list.
+
+**Before every QA / re-QA subagent launch on Pi:**
+
+1. Read active models from `~/.pi/agent/settings.json` → `enabledModels` (full `provider/id` strings). If that file is missing, say so and stop; do not invent a catalog.
+2. Show the list to the user. Include display names when known from `~/.pi/agent/models-store.json`, but the selectable value is the `enabledModels` entry.
+3. Mark the parent session model and `.subagents.defaultModel` so the user can see what would run if nobody chose.
+4. Recommend one certifier (strong independent model, **not** the Executor worker's model when you know it). State the recommendation in the list.
+5. Ask which model to use for the QA worker. Do not launch until the user names an id from that list (or confirms the recommendation).
+6. Store the pick in flow state as `qa_model`.
+7. Launch the QA subagent **with `model` set to that id**. This is the one allowed override of Pi's "never pass `model` on subagent" rule: **Kyro QA only, user-selected, from `enabledModels`.**
+8. If thinking level is needed, use `modelThinkingLevels[qa_model]` from the same settings file when present.
+
+**Do not:**
+
+- Launch QA on Pi without a user-picked `qa_model`.
+- Copy the parent session model onto the QA child unless that id is what the user picked from the list.
+- Use `.subagents.defaultModel` silently for certification.
+- Offer models that are not in `enabledModels`.
+
+**Ask shape (Pi):**
+
+```text
+Kyro recomienda siguiente: QA / Certification.
+
+Modelos activos (enabledModels):
+1. provider/id-a
+2. provider/id-b   ← recomendado para certificar
+3. provider/id-c
+
+El worker de QA debe correr con el modelo que elijas.
+¿Con cuál modelo lanzo el worker de QA?
+```
+
+Wait for the answer. Then launch.
+
 ### Step 3 — Launch the QA / Certificator Worker
 
 Only after authorization (first time) or as a re-QA after fixes.
+
+On Pi: only after a `qa_model` pick from **Pi — QA certifier model**. Pass that `model` on the subagent call.
 
 Launch a **new** independent subagent. Inject Executor result (and any later fix results). QA must certify independently.
 
@@ -306,7 +354,7 @@ Then read `QA STATUS` and `KYRO NEXT STEP` from that same text. Do not assume th
 4. Launch a **new** Fix Worker with: prior Executor result, QA result, Fix Plan, and flow state.
 5. Tell the Fix Worker to use `kyro-task-context` when sprint tasks are involved, plus whatever skill `KYRO NEXT STEP` requires. Do not assume it is always `kyro-sprint-executor`.
 6. Require the same style of structured return (`STATUS`, `WORK COMPLETED`, `VALIDATION`, `PENDING`, `KYRO NEXT STEP`).
-7. Present the fix status. Continue from the new `KYRO NEXT STEP`. If that step is QA, launch a **new** QA worker (Step 3) with prior QA + findings + Fix Plan + fix summary. No second authorization required on this QA track.
+7. Present the fix status. Continue from the new `KYRO NEXT STEP`. If that step is QA, launch a **new** QA worker (Step 3) with prior QA + findings + Fix Plan + fix summary. No second authorization required on this QA track. On Pi, still list active models and confirm `qa_model` before that launch (reuse the last pick only if the user already confirmed it for this QA track).
 
 #### Case B — `PASS`
 
@@ -323,6 +371,8 @@ Use the host's subagent / Task mechanism.
 ```text
 WRONG: orchestrator loads kyro-sprint-executor and starts coding
 WRONG: reuse the same worker for execute then QA
+WRONG: on Pi, launch QA without listing enabledModels and without a user-picked qa_model
+WRONG: on Pi, launch QA on .subagents.defaultModel (or the parent model) without the user choosing it from the list
 WRONG: omit prior results from the next worker prompt
 WRONG: treat a chatty summary as the return contract
 WRONG: orchestrator rewrites or shortens the QA worker's final message
@@ -330,14 +380,15 @@ WRONG: QA worker summarizes kyro-qa instead of forwarding its output
 
 RIGHT: new worker, named skills in the brief, injected flow state, structured return
 RIGHT: QA worker final message == kyro-qa output; user sees that exact text
+RIGHT: on Pi, QA subagent `model` == the id the user picked from enabledModels
 ```
 
 Host notes:
 
-- Pi: launch a subagent; tell it to load the worker skills (`/skill:kyro-sprint-executor`, etc.). This skill stays on the parent.
+- Pi: launch a subagent; tell it to load the worker skills (`/skill:kyro-sprint-executor`, etc.). This skill stays on the parent. **QA workers: pass `model` = user-picked `qa_model`.** Executor/Fix workers still omit `model` (Pi default).
 - Claude Code / similar: `Task` with a brief that names the skills. Do not `Skill("kyro-sprint-executor")` on the parent.
 
-Prefer autonomous execution **inside** a worker. The orchestrator **does** stop for: QA authorization after first Executor, sprint close, the 3-round cap, missing CLI, and real blocks.
+Prefer autonomous execution **inside** a worker. The orchestrator **does** stop for: QA authorization after first Executor, **Pi QA model pick**, sprint close, the 3-round cap, missing CLI, and real blocks.
 
 ## Status Presentation
 
@@ -368,7 +419,10 @@ ORCHESTRATOR  →  store + present status
          user yes
             │
             ▼
-     QA / CERTIFICATOR WORKER  →  kyro-qa
+     (Pi) list enabledModels → user picks qa_model
+            │
+            ▼
+     QA / CERTIFICATOR WORKER  →  kyro-qa  (Pi: model = qa_model)
             │
             ▼
      ORCHESTRATOR
@@ -414,6 +468,10 @@ Stop. That work belongs in an Executor Worker. Launch one with the brief above.
 
 Invalid. Present the Executor status and ask. Discard any QA that ran without authorization.
 
+### Pi: QA launched without a user-picked certifier model
+
+Invalid. Certification did not run on a chosen model. Present `enabledModels`, get `qa_model`, re-run QA with that `model`. Discard the unchosen run.
+
 ### Same subagent used for execute and QA
 
 Invalid. QA must be a new worker. Re-run QA independently.
@@ -434,3 +492,5 @@ KYRO NEXT STEP: QA / Certification
 
 ¿Quieres que lance el worker de QA?
 ```
+
+On Pi, append the active-model list and wait for `qa_model` before that launch.

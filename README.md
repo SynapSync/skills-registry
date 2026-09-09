@@ -62,7 +62,7 @@ synapse-registry/
 | [obsidian](cognitives/skills/integrations/obsidian/) | integrations | 4.1.0 | Unified Obsidian vault manager: sync documents, read notes, and search knowledge |
 | [project-brain](cognitives/skills/workflow/project-brain/) | workflow | 2.9.0 | Session memory for AI agents — load context, save sessions, evolve knowledge |
 | [ad3c-cycle](cognitives/skills/workflow/ad3c-cycle/) | workflow | 1.0.0 | Per-task implementation micro-cycle: Analyze, Develop, Certify, Correct, Close |
-| [kyro-sprint-flow](cognitives/skills/workflow/kyro-sprint-flow/) | workflow | 1.1.0 | Orchestrates Kyro sprint flow via executor/QA workers; follows Kyro next step |
+| [kyro-pi-sprint-flow](cognitives/skills/workflow/kyro-pi-sprint-flow/) | workflow | 1.3.0 | Pi-oriented Kyro sprint orchestrator via executor/QA workers; follows Kyro next step |
 | [growth-ceo](cognitives/skills/planning/growth-ceo/) | planning | 2.1.0 | Elite tech CEO strategist: first principles, 7 Powers, flywheels, and billion-dollar-scale thinking |
 
 ### Agents

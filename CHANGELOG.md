@@ -9,6 +9,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and th
 ## [Unreleased]
 
 ### Changed
+- **kyro-pi-sprint-flow** skill (workflow, v1.3.0): Renamed from `kyro-sprint-flow`. Pi-oriented Kyro sprint orchestrator.
+- **kyro-sprint-flow** skill (workflow, v1.2.0): On Pi, before launching the QA worker the orchestrator must list `enabledModels` from `~/.pi/agent/settings.json`, wait for a user-picked certifier model, and launch the QA subagent with that `model`. Silent `.subagents.defaultModel` is not a valid certifier.
 - **kyro-sprint-flow** skill (workflow, v1.1.0): QA worker must forward the exact `kyro-qa` output; orchestrator presents that final message verbatim to the user (no recap, translation, or restyle). Executor/Fix reports show the full return contract. Flow state stores `raw_output`.
 
 ### Added
@@ -27,7 +29,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and th
 - **project-brain** skill (workflow, v2.9.0): Configuration Resolution, brain-config, and brain-resolve defaults use `{scope}`.
 
 ### Removed
-- **kyro-sprint-executor** skill (workflow, v1.0.0): Withdrawn from the registry. Sprint execution belongs to the Kyro runtime skill, not a duplicate registry cognitive. `kyro-sprint-flow` still instructs Executor workers to load it from the installed Kyro runtime.
+- **kyro-sprint-executor** skill (workflow, v1.0.0): Withdrawn from the registry. Sprint execution belongs to the Kyro runtime skill, not a duplicate registry cognitive. `kyro-pi-sprint-flow` still instructs Executor workers to load it from the installed Kyro runtime.
 - **sprint-forge** skill (workflow, v1.10.0): Removed from registry — migrated to a workflow cognitive type. Will be re-added as a workflow in a future release.
 - **universal-planner** skill (planning, v3.6.0): Removed from registry.
 - **growth-architect** skill (planning, v2.6.0): Removed from registry.
