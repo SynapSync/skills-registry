@@ -2,7 +2,7 @@
   "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
   "name": "kyro-sprint-flow",
   "type": "skill",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Orchestrates Kyro sprint flow via executor/QA workers; follows Kyro next step",
   "author": {
     "name": "joicodev",
@@ -37,8 +37,17 @@
     "url": "https://github.com/SynapSync/skills-registry"
   },
   "createdAt": "2026-09-08T00:00:00Z",
-  "updatedAt": "2026-09-08T00:00:00Z",
+  "updatedAt": "2026-09-09T00:00:00Z",
   "changelog": [
+    {
+      "version": "1.1.0",
+      "date": "2026-09-09",
+      "changes": [
+        "QA worker must return the kyro-qa output verbatim; no wrap, summary, or restyle",
+        "Orchestrator must present the QA worker final message to the user unchanged",
+        "Executor/Fix status is the full return contract, not a recap; store raw_output in flow state"
+      ]
+    },
     {
       "version": "1.0.0",
       "date": "2026-09-08",

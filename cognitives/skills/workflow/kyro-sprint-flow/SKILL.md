@@ -9,7 +9,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: joicodev
-  version: "1.0"
+  version: "1.1"
   scope: [root]
   auto_invoke:
     - "run the active sprint"
@@ -65,6 +65,7 @@ Run the active Kyro sprint end-to-end through isolated workers, preserve every w
 9. **Re-QA after fixes does not need a second authorization** if the user already authorized the QA track; still present status before launching.
 10. **Cap the fix → QA loop at 3 rounds.** On the fourth `CHANGES_REQUIRED`, stop and ask the user. Do not grind.
 11. **Closing a sprint is a user gate.** Even if `KYRO NEXT STEP` is close, ask before any close action. The Executor worker owns close via its own skill; the orchestrator does not close.
+12. **Never paraphrase a worker's final report.** Store the full text. For Executor and Fix, present every contract section — no dropped fields. For QA, present the worker's final message **verbatim** (the exact `kyro-qa` output). Do not summarize, translate, trim, or rewrite it.
 
 ## Role Split
 
@@ -90,6 +91,7 @@ KYRO FLOW STATE
     findings
     validation
     next_step
+    raw_output          # full final message from the worker; required for QA
   executor_results[]
   qa_results[]
   fix_results[]
@@ -186,15 +188,7 @@ COMPLETED | PARTIAL | BLOCKED | FAILED | <Kyro-defined status>
 
 ### Step 2 — Present Executor status (user gate)
 
-Store the result in flow state. Present a concise status to the user:
-
-```text
-STATUS
-WORK COMPLETED
-VALIDATION
-PENDING
-KYRO NEXT STEP
-```
+Store the result in flow state, including `raw_output`. Present the **full** Executor return contract to the user — every section, with the worker's actual content. Do not collapse it into a one-paragraph recap.
 
 If `KYRO NEXT STEP` is QA / certification, ask before launching:
 
@@ -238,10 +232,15 @@ Load and follow kyro-qa.
 Validate the real work independently.
 Do not assume something is correct because the Executor said it is.
 
-Return the QA return contract. Do not return a prose-only summary.
+Your FINAL message MUST be exactly the output that kyro-qa produces.
+Do not wrap it, summarize it, add an intro/outro, translate it, or omit sections.
+If kyro-qa emits a report, that report is your entire return.
+The QA return contract fields must appear because kyro-qa produced them, not because you rewrote them.
 ```
 
 ### QA return contract
+
+The worker does **not** author a parallel report. It forwards the `kyro-qa` output as-is. That output should contain the equivalent of:
 
 ```markdown
 ## QA STATUS
@@ -268,9 +267,25 @@ For each issue:
 <explicit next action>
 ```
 
+If `kyro-qa` uses different headings, keep those headings. Do not reformat the report into this template.
+
+Missing `QA STATUS` / equivalent and `KYRO NEXT STEP` / equivalent → `BLOCKED` (steer the worker to return the unmodified QA output, not a new summary).
+
 ### Step 4 — After QA
 
-Store the result. Present status to the user. Read `QA STATUS` and `KYRO NEXT STEP`. Do not assume the next action.
+Store `raw_output` as the worker's **entire** final message. Present that message to the user **verbatim**.
+
+```text
+WRONG: "QA passed with 2 minor notes. Next step: close."
+WRONG: a shortened STATUS/FINDINGS recap you wrote
+WRONG: translating or restyling the QA report
+
+RIGHT: paste the QA worker's final message unchanged
+RIGHT: after the verbatim report, you MAY add one clearly separated line
+       only for a user gate (e.g. "¿Lanzamos el Fix Worker?" or close approval)
+```
+
+Then read `QA STATUS` and `KYRO NEXT STEP` from that same text. Do not assume the next action.
 
 #### Case A — `CHANGES_REQUIRED` (or equivalent)
 
@@ -310,8 +325,11 @@ WRONG: orchestrator loads kyro-sprint-executor and starts coding
 WRONG: reuse the same worker for execute then QA
 WRONG: omit prior results from the next worker prompt
 WRONG: treat a chatty summary as the return contract
+WRONG: orchestrator rewrites or shortens the QA worker's final message
+WRONG: QA worker summarizes kyro-qa instead of forwarding its output
 
 RIGHT: new worker, named skills in the brief, injected flow state, structured return
+RIGHT: QA worker final message == kyro-qa output; user sees that exact text
 ```
 
 Host notes:
@@ -323,18 +341,12 @@ Prefer autonomous execution **inside** a worker. The orchestrator **does** stop 
 
 ## Status Presentation
 
-After every important worker, show:
+| Worker | What the user sees |
+|--------|--------------------|
+| **Executor / Fix** | The full return contract (every section, worker wording). Not a recap. |
+| **QA** | The worker's final message **verbatim** = the `kyro-qa` output. Nothing rewritten. |
 
-```text
-STATUS
-WORK COMPLETED
-VALIDATION
-FINDINGS          (when QA or a failed execution)
-PENDING
-KYRO NEXT STEP
-```
-
-Ask the user only when a gate or a block requires it.
+Ask the user only when a gate or a block requires it. Any gate question goes **after** the full/verbatim report, never instead of it.
 
 ## Main Flow (common path, not a state machine)
 
@@ -389,6 +401,10 @@ ORCHESTRATOR  →  store + present status
 ### Worker returned only prose
 
 Re-launch or steer with: "Return the contract sections exactly. Do not omit STATUS or KYRO NEXT STEP." Do not synthesize those fields.
+
+### Orchestrator summarized QA for the user
+
+Invalid. Replace the recap with the stored `raw_output` from the QA worker. If `raw_output` was not stored, re-run QA.
 
 ### Orchestrator started implementing
 
