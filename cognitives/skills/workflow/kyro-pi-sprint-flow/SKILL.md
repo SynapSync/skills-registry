@@ -9,7 +9,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: joicodev
-  version: "1.3"
+  version: "1.4"
   scope: [root]
   auto_invoke:
     - "run the active sprint"
@@ -37,7 +37,7 @@ ORCHESTRATOR
     │  directs · delegates · stores results · interprets NEXT STEP
     │
     ├── Executor Worker     → kyro-task-context + kyro-sprint-executor
-    ├── QA / Certificator   → kyro-qa
+    ├── QA / Certificator   → kyro qa <scope> (host command/skill)
     └── Other workers       → skills required by KYRO NEXT STEP
 ```
 
@@ -56,19 +56,19 @@ Run the active Kyro sprint end-to-end through isolated workers, preserve every w
 
 ## Critical Rules
 
-1. **Orchestrator directs; workers execute.** Never load `kyro-sprint-executor`, `kyro-task-context`, or `kyro-qa` in the orchestrator session.
+1. **Orchestrator directs; workers execute.** Never load `kyro-sprint-executor`, `kyro-task-context`, or invoke `kyro qa <scope>` in the orchestrator session.
 2. **One new independent worker per stage.** Fresh context. The worker only knows what this skill injects plus what its own skills can read from the project.
 3. **Never invent worker results.** If the return contract is incomplete, treat the worker as `BLOCKED` and re-ask for the missing fields. Do not fill gaps from memory.
-4. **Follow `KYRO NEXT STEP`.** `EXECUTOR → QA → FIX → QA` is a common path, not a machine you hardcode.
+4. **Follow `KYRO NEXT STEP`.** `EXECUTOR → QA-or-close → FIX → re-QA` is a common path, not a machine you hardcode.
 5. **Active sprint only.** No future sprints, no previous sprints, no out-of-scope tasks.
 6. **Do not hand-edit** `sprint.json`, `project.json`, evidence, verdicts, or any Kyro-managed state.
-7. **QA after the first Executor run requires user authorization.** Present status, then ask. Do not auto-launch that QA worker.
+7. **`qa_or_close` is a user decision.** On the first arrival, present exactly two valid choices: run `kyro qa <scope>` or close without QA. Do not auto-launch QA or close. After a QA failure in this session, do not offer close again: re-QA is mandatory after remediation.
 8. **On Pi, QA requires an explicit certifier model before launch.** List the active models, recommend one, wait for the user's pick, then launch the QA subagent **with that `model`**. Do not launch QA on Pi's subagent default. Certification is invalid if the worker ran on an unchosen model.
 9. **QA is always a new independent worker.** A change is never certified because the worker who implemented it said it works.
 10. **Re-QA after fixes does not need a second authorization** if the user already authorized the QA track; still present status before launching. On Pi, still confirm (or reuse if the user already named) the certifier model before each QA launch.
 11. **Cap the fix → QA loop at 3 rounds.** On the fourth `CHANGES_REQUIRED`, stop and ask the user. Do not grind.
 12. **Closing a sprint is a user gate.** Even if `KYRO NEXT STEP` is close, ask before any close action. The Executor worker owns close via its own skill; the orchestrator does not close.
-13. **Never paraphrase a worker's final report.** Store the full text. For Executor and Fix, present every contract section — no dropped fields. For QA, present the worker's final message **verbatim** (the exact `kyro-qa` output). Do not summarize, translate, trim, or rewrite it.
+13. **Never paraphrase a worker's final report.** Store the full text. For Executor and Fix, present every contract section — no dropped fields. For QA, present the worker's final message **verbatim** (the exact `kyro qa <scope>` output). Do not summarize, translate, trim, or rewrite it.
 
 ## Role Split
 
@@ -76,7 +76,7 @@ Run the active Kyro sprint end-to-end through isolated workers, preserve every w
 |------|-------|------|----------|
 | **Orchestrator** (this skill) | nothing from the worker set | route, launch, inject state, present status, ask gates, build Fix Plan | implement, certify, context-pack, record-evidence, review |
 | **Executor Worker** | `kyro-task-context`, `kyro-sprint-executor` | execute the active sprint from real state | assume orchestrator summaries are sufficient |
-| **QA / Certificator Worker** | `kyro-qa` | independently certify real work | trust Executor claims |
+| **QA / Certificator Worker** | `kyro qa <scope>` through host resolution | independently certify real work | trust Executor claims |
 | **Fix Worker** | skills required by `KYRO NEXT STEP` (often `kyro-task-context` + executor skill) | apply the Fix Plan | skip validation or self-certify |
 
 ## Flow State
@@ -100,7 +100,10 @@ KYRO FLOW STATE
   fix_results[]
   pending_actions[]
   current_next_step
+  active_scope           # resolved active Kyro scope; required for kyro qa <scope>
   fix_qa_rounds          # integer, starts at 0
+  qa_track_authorized    # true after the user chooses QA in this session
+  qa_remediation_pending # true after QA fails; forces same-session re-QA
   qa_model               # Pi only: provider/id the user picked for the QA worker
 ```
 
@@ -121,10 +124,18 @@ WHAT KYRO RECOMMENDS NEXT
 Routing only. Do **not** execute or certify.
 
 1. If the user already named the stage (execute / QA / fix), use that.
-2. Else run `kyro status` (or `kyro status --json` when available) solely to see the active sprint and recommended next action.
-3. If the CLI is missing, say so and stop. Do not improvise Kyro state from files.
+2. Else run `kyro status` (or `kyro status --json` when available) solely to resolve the active scope and recommended next action. Store the resolved scope as `active_scope`.
+3. If the CLI is missing or the active scope is ambiguous, say so and stop. Do not improvise Kyro state from files.
 
-Then pick the worker type from stage + `KYRO NEXT STEP` + user intent.
+Then pick the worker type from stage + `KYRO NEXT STEP` + user intent:
+
+| Runtime next step | Orchestrator action |
+|---|---|
+| `execute_task` / `review_task` | Launch Executor Worker. |
+| `qa_or_close` and `qa_remediation_pending` is false | Present the QA-or-close decision in Step 2. |
+| `qa_or_close` and `qa_remediation_pending` is true | Launch re-QA through Step 3; do not offer close. |
+| `close_sprint` | Ask for the close gate, then launch a fresh Executor/Close Worker; never close in the parent. |
+| Other | Follow the Kyro-defined step or stop for a real block. |
 
 ### Step 1 — Launch the Executor Worker (when execution is required)
 
@@ -155,6 +166,19 @@ When finished, return the Executor return contract. Do not return a prose-only s
 ```
 
 If prior `KYRO FLOW STATE` exists, append it under `Prior orchestrator state (informational):`.
+
+### Close Worker variant
+
+When the user selected close without QA, or QA approved, launch a fresh Executor Worker with this additional instruction:
+
+```text
+The active scope is <active_scope>. The user has selected the close path.
+Do not re-open the QA-or-close decision. Recover real state, follow the Kyro close protocol,
+run required pre-close checks, present the normal close confirmation gate, and use only the
+CLI-owned close operation after that confirmation. Do not hand-edit Kyro state.
+```
+
+The parent only delegates and presents gates; it never invokes the close operation itself.
 
 ### Executor return contract
 
@@ -194,9 +218,7 @@ COMPLETED | PARTIAL | BLOCKED | FAILED | <Kyro-defined status>
 
 Store the result in flow state, including `raw_output`. Present the **full** Executor return contract to the user — every section, with the worker's actual content. Do not collapse it into a one-paragraph recap.
 
-If `KYRO NEXT STEP` is QA / certification, ask before launching.
-
-On **Pi**, the ask **must** include the active-model list and a certifier pick. Do this **before** any QA subagent call. See **Pi — QA certifier model (mandatory)**.
+If `KYRO NEXT STEP` is `qa_or_close` (or its explicit QA-or-close equivalent), present the initial decision before launching any worker:
 
 ```text
 Sprint execution finished.
@@ -206,14 +228,18 @@ Work: ...
 Validations: ...
 Pending: ...
 
-Kyro recommends next: QA / Certification
+Kyro recommends next: QA or close.
 
-Do you want me to launch the QA worker?
+Choose one:
+1. Run `kyro qa <active_scope>`.
+2. Close this sprint without QA.
 ```
 
-Do **not** launch QA until the user authorizes it at this point.
+- QA selected: set `qa_track_authorized = true`, then complete the Pi model-selection gate below before Step 3.
+- Close selected: launch a fresh Executor/Close Worker with the explicit instruction that the user chose the close path without QA; the worker must still enforce the normal close confirmation.
+- If `qa_remediation_pending` is true, do **not** ask this question again. Re-QA is mandatory after the corrective worker reaches `qa_or_close`.
 
-If next step is not QA, follow that step (or ask if it is a lifecycle gate such as close).
+For a direct QA/certification next step outside `qa_or_close`, retain the same user authorization and Pi model gate. If next step is neither QA nor close, follow the Kyro-defined step or stop for a real block.
 
 ### Pi — QA certifier model (mandatory)
 
@@ -263,36 +289,38 @@ On Pi: only after a `qa_model` pick from **Pi — QA certifier model**. Pass tha
 
 Launch a **new** independent subagent. Inject Executor result (and any later fix results). QA must certify independently.
 
-**Worker must load:** `kyro-qa`.
+**Worker must invoke:** the host command/skill `kyro qa <active_scope>`. It is not a subcommand of the resolved Kyro CLI binary; do not pass `qa` to that binary.
 
 **Brief (send this):**
 
 ```text
 You are the QA / Certificator Worker for this Kyro sprint.
 
+Active scope: <active_scope>
 Executor result (starting point, not proof):
 [EXECUTOR RESULT]
 [FIX RESULTS if any]
 [PRIOR QA RESULT if this is a re-QA]
 
-Load and follow kyro-qa.
+Invoke and follow the host Kyro command/skill: `kyro qa <active_scope>`.
+It is a host command/skill, not a subcommand of the Kyro CLI binary.
 
 Validate the real work independently.
 Do not assume something is correct because the Executor said it is.
 
-Your FINAL message MUST be exactly the output that kyro-qa produces.
+Your FINAL message MUST be exactly the output that `kyro qa <active_scope>` produces.
 Do not wrap it, summarize it, add an intro/outro, translate it, or omit sections.
-If kyro-qa emits a report, that report is your entire return.
-The QA return contract fields must appear because kyro-qa produced them, not because you rewrote them.
+If it emits a report, that report is your entire return.
+The QA return contract fields must appear because the QA command/skill produced them, not because you rewrote them.
 ```
 
 ### QA return contract
 
-The worker does **not** author a parallel report. It forwards the `kyro-qa` output as-is. That output should contain the equivalent of:
+The worker does **not** author a parallel report. It forwards the `kyro qa <active_scope>` output as-is. That output should contain the equivalent of:
 
 ```markdown
 ## QA STATUS
-PASS | CHANGES_REQUIRED | BLOCKED | <status defined by kyro-qa>
+APPROVED | APPROVED WITH NOTES | CHANGES REQUIRED | REJECTED | BLOCKED | <status defined by kyro qa>
 
 ## FINDINGS
 For each issue:
@@ -315,7 +343,7 @@ For each issue:
 <explicit next action>
 ```
 
-If `kyro-qa` uses different headings, keep those headings. Do not reformat the report into this template.
+If `kyro qa <active_scope>` uses different headings, keep those headings. Do not reformat the report into this template.
 
 Missing `QA STATUS` / equivalent and `KYRO NEXT STEP` / equivalent → `BLOCKED` (steer the worker to return the unmodified QA output, not a new summary).
 
@@ -335,10 +363,15 @@ RIGHT: after the verbatim report, you MAY add one clearly separated line
 
 Then read `QA STATUS` and `KYRO NEXT STEP` from that same text. Do not assume the next action.
 
-#### Case A — `CHANGES_REQUIRED` (or equivalent)
+#### Case A — `CHANGES_REQUIRED` / `REJECTED` (or equivalent)
 
-1. Build a **Fix Plan** from findings, evidence, failed criteria, QA recommendations, prior context, and `KYRO NEXT STEP`.
-2. Each plan item:
+1. Set `qa_remediation_pending = true`; re-QA is now mandatory in this orchestrator session.
+2. Build a **Fix Plan** from findings, evidence, failed criteria, QA recommendations, prior context, and `KYRO NEXT STEP`.
+3. Materialize each blocking correction through the real Kyro lifecycle before a Fix Worker implements it:
+   - Finding clearly violates an existing task's acceptance criteria → require `kyro review <task-id> --verdict fail` so it returns to `execute_task`.
+   - New, cross-cutting, or ambiguously owned work → require `kyro add-emergent` with independently verifiable acceptance criteria and QA context.
+   - Non-blocking follow-up → use `kyro debt add` when appropriate; never present it as completed corrective work.
+4. Each plan item:
 
 ```markdown
 ## Problem
@@ -350,15 +383,15 @@ Then read `QA STATUS` and `KYRO NEXT STEP` from that same text. Do not assume th
 ## Validation (how to prove the fix)
 ```
 
-3. Increment `fix_qa_rounds`. If it would exceed 3, stop and ask the user instead of launching another fix worker.
-4. Launch a **new** Fix Worker with: prior Executor result, QA result, Fix Plan, and flow state.
-5. Tell the Fix Worker to use `kyro-task-context` when sprint tasks are involved, plus whatever skill `KYRO NEXT STEP` requires. Do not assume it is always `kyro-sprint-executor`.
-6. Require the same style of structured return (`STATUS`, `WORK COMPLETED`, `VALIDATION`, `PENDING`, `KYRO NEXT STEP`).
-7. Present the fix status. Continue from the new `KYRO NEXT STEP`. If that step is QA, launch a **new** QA worker (Step 3) with prior QA + findings + Fix Plan + fix summary. No second authorization required on this QA track. On Pi, still list active models and confirm `qa_model` before that launch (reuse the last pick only if the user already confirmed it for this QA track).
+5. Increment `fix_qa_rounds`. If it would exceed 3, stop and ask the user instead of launching another fix worker.
+6. Launch a **new** Fix Worker with: prior Executor result, QA result, Fix Plan, materialized task ids, and flow state.
+7. Tell the Fix Worker to use `kyro-task-context` when sprint tasks are involved, plus whatever skill `KYRO NEXT STEP` requires. Do not assume it is always `kyro-sprint-executor`.
+8. Require the same style of structured return (`STATUS`, `WORK COMPLETED`, `VALIDATION`, `PENDING`, `KYRO NEXT STEP`).
+9. Present the fix status. When the real route returns to `qa_or_close`, launch a **new** QA worker (Step 3) immediately because `qa_remediation_pending` is true. Do not offer close and do not request a second QA-track authorization. On Pi, still list active models and confirm `qa_model` before that launch; reuse the last pick only if the user already confirmed it for this QA track.
 
-#### Case B — `PASS`
+#### Case B — `PASS` / `APPROVED` / `APPROVED WITH NOTES`
 
-Read `KYRO NEXT STEP`. Continue the Kyro-defined next step. **PASS does not mean you invent the end of the process.** If next step is close, ask the user.
+Clear `qa_remediation_pending`. A passing QA result allows the close path, but does not close in the parent. Present the required close gate, then launch a fresh Executor/Close Worker with the active scope and the approved QA output. **PASS does not mean you invent the end of the process or bypass close confirmation.**
 
 #### Case C — `BLOCKED` / `FAILED`
 
@@ -376,10 +409,10 @@ WRONG: on Pi, launch QA on .subagents.defaultModel (or the parent model) without
 WRONG: omit prior results from the next worker prompt
 WRONG: treat a chatty summary as the return contract
 WRONG: orchestrator rewrites or shortens the QA worker's final message
-WRONG: QA worker summarizes kyro-qa instead of forwarding its output
+WRONG: QA worker summarizes `kyro qa <scope>` instead of forwarding its output
 
-RIGHT: new worker, named skills in the brief, injected flow state, structured return
-RIGHT: QA worker final message == kyro-qa output; user sees that exact text
+RIGHT: new worker, named commands/skills in the brief, injected flow state, structured return
+RIGHT: QA worker final message == `kyro qa <scope>` output; user sees that exact text
 RIGHT: on Pi, QA subagent `model` == the id the user picked from enabledModels
 ```
 
@@ -395,7 +428,7 @@ Prefer autonomous execution **inside** a worker. The orchestrator **does** stop 
 | Worker | What the user sees |
 |--------|--------------------|
 | **Executor / Fix** | The full return contract (every section, worker wording). Not a recap. |
-| **QA** | The worker's final message **verbatim** = the `kyro-qa` output. Nothing rewritten. |
+| **QA** | The worker's final message **verbatim** = the `kyro qa <scope>` output. Nothing rewritten. |
 
 Ask the user only when a gate or a block requires it. Any gate question goes **after** the full/verbatim report, never instead of it.
 
@@ -405,7 +438,7 @@ Ask the user only when a gate or a block requires it. Any gate question goes **a
 USER
  │
  ▼
-ORCHESTRATOR  →  identify stage (status only)
+ORCHESTRATOR  →  identify active_scope + nextAction
  │
  ▼
 EXECUTOR WORKER
@@ -414,22 +447,22 @@ EXECUTOR WORKER
  ▼
 ORCHESTRATOR  →  store + present status
  │
- └── if next step is QA: "Launch QA worker?"
-            │
-         user yes
-            │
-            ▼
-     (Pi) list enabledModels → user picks qa_model
-            │
-            ▼
-     QA / CERTIFICATOR WORKER  →  kyro-qa  (Pi: model = qa_model)
-            │
-            ▼
-     ORCHESTRATOR
-        │
-        ├── CHANGES_REQUIRED → Fix Plan → Fix Worker → follow NEXT STEP → re-QA if required
-        ├── PASS             → follow KYRO NEXT STEP
-        └── BLOCKED/FAILED   → present block, wait
+ └── nextAction = qa_or_close
+       ├── user: close without QA → fresh Executor/Close Worker → normal close gate
+       └── user: run QA
+              │
+              ▼
+       (Pi) list enabledModels → user picks qa_model
+              │
+              ▼
+       QA / CERTIFICATOR WORKER → kyro qa <active_scope> (Pi: model = qa_model)
+              │
+              ▼
+       ORCHESTRATOR
+          ├── APPROVED / APPROVED WITH NOTES → fresh Executor/Close Worker → normal close gate
+          ├── CHANGES REQUIRED / REJECTED → review fail or add-emergent → Fix Worker
+          │                                  → execute/review → qa_or_close → mandatory re-QA
+          └── BLOCKED/FAILED → present block, wait
 ```
 
 ## Integration with Other Skills
@@ -438,7 +471,7 @@ ORCHESTRATOR  →  store + present status
 |-------|----------------|------|
 | `kyro-task-context` | Executor / Fix workers | Recover real sprint context. Never the orchestrator. |
 | `kyro-sprint-executor` | Executor Worker | Execute the active sprint. Never the orchestrator. |
-| `kyro-qa` | QA Worker | Independent certification. Never the orchestrator. |
+| `kyro qa <scope>` | QA Worker | Independent host-command/skill certification. Never the orchestrator. |
 | `kyro-status` / `kyro status` | Orchestrator (routing only) | Identify stage. Not a substitute for worker skills. |
 | `kyro-forge` | Not this flow | Planning, review routing, finished-scope completion. |
 | `ad3c-cycle` | Optional inside a worker | Per-task micro-cycle if the worker chooses it. Not an orchestrator substitute. |
@@ -488,9 +521,11 @@ SPRINT: sprint-12 — notification inbox
 WORK COMPLETED: tasks T-04, T-05; unread badge + mark-as-read
 VALIDATION: unit tests pass; no e2e run
 PENDING: none
-KYRO NEXT STEP: QA / Certification
+KYRO NEXT STEP: qa_or_close
 
-¿Quieres que lance el worker de QA?
+Elige una opción:
+1. Ejecutar `kyro qa <active_scope>`.
+2. Cerrar el sprint sin QA.
 ```
 
-On Pi, append the active-model list and wait for `qa_model` before that launch.
+If QA is selected on Pi, append the active-model list and wait for `qa_model` before that launch. If this session already has `qa_remediation_pending`, do not show this choice: re-QA is required.
