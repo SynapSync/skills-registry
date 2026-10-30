@@ -1,0 +1,50 @@
+{
+  "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
+  "name": "kyro-qa-assist",
+  "type": "skill",
+  "version": "1.0.0",
+  "description": "Read-only QA tester copilot: what changed, what to test, regression risk, defect reports",
+  "author": {
+    "name": "joicodev",
+    "url": "https://github.com/joicodev"
+  },
+  "license": "Apache-2.0",
+  "category": "testing",
+  "tags": [
+    "kyro",
+    "qa",
+    "testing",
+    "manual-testing",
+    "regression",
+    "test-design",
+    "risk-based-testing",
+    "defect-report",
+    "release-notes",
+    "read-only"
+  ],
+  "providers": [
+    "claude",
+    "openai",
+    "cursor",
+    "windsurf",
+    "copilot",
+    "gemini",
+    "codex"
+  ],
+  "file": "SKILL.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SynapSync/skills-registry"
+  },
+  "createdAt": "2026-10-30T00:00:00Z",
+  "updatedAt": "2026-10-30T00:00:00Z",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-30",
+      "changes": [
+        "Initial release: read-only QA tester copilot with evidence labels, three context tiers (full Kyro, Kyro files, git-only), intent-gated assets for sources, oracles, regression, test design, and defect reports"
+      ]
+    }
+  ]
+}
