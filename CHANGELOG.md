@@ -9,6 +9,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and th
 ## [Unreleased]
 
 ### Changed
+- **kyro-pi-sprint-flow** skill (workflow, v1.4.0): Routes `qa_or_close` as an initial user choice between host-command/skill `kyro qa <scope>` and closing without QA. QA failures are materialized through task review failures or emergent tasks, and force re-QA only for the active Pi session. The parent delegates QA and close; it never invokes either operation itself.
 - **kyro-pi-sprint-flow** skill (workflow, v1.3.0): Renamed from `kyro-sprint-flow`. Pi-oriented Kyro sprint orchestrator.
 - **kyro-sprint-flow** skill (workflow, v1.2.0): On Pi, before launching the QA worker the orchestrator must list `enabledModels` from `~/.pi/agent/settings.json`, wait for a user-picked certifier model, and launch the QA subagent with that `model`. Silent `.subagents.defaultModel` is not a valid certifier.
 - **kyro-sprint-flow** skill (workflow, v1.1.0): QA worker must forward the exact `kyro-qa` output; orchestrator presents that final message verbatim to the user (no recap, translation, or restyle). Executor/Fix reports show the full return contract. Flow state stores `raw_output`.
