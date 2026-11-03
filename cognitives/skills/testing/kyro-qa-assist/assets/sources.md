@@ -6,12 +6,36 @@ This list is exhaustive. If a command is not here, do not run it.
 
 **Shell glue (allowed)**
 
-- `cd <repo>` or `git -C <repo>` to target the repository; prefer running from the repository root.
+- `cd <directory>` or the hardened `git -C <git_root>` invocation below to target a directory. Keep `workspace_root` (Kyro files/CLI) distinct from `git_root` (history and repository-relative paths).
 - Pipes into read-only text filters: `head`, `tail`, `sed -n`, `grep`, `wc`, `sort`, `uniq`, `cut`.
 - `ls`, `test -e|-d|-f`, `cat` on files, `echo`, shell variables, and `2>/dev/null` / `2>&1`.
 - Never redirect output into a file (`>`, `>>`, `tee`), never use `rm`, `mv`, `cp`, `mkdir`, `touch`, `chmod`, or an editor. Prefer the host's Read/Glob/Grep tools when it has them.
 
 **git (read-only)**
+
+### Mandatory invocation for every Git read
+
+Every `git` example and allowlist entry in **all** skill files is shorthand for this single prefix, followed by the subcommand and the protective flags in the table below:
+
+```bash
+GIT_NO_LAZY_FETCH=1 git --no-optional-locks --no-pager -c core.fsmonitor=false -C "$git_root" <subcommand> <flags-and-arguments>
+```
+
+This environment assignment, `-C`, `--no-optional-locks`, `--no-pager`, `-c core.fsmonitor=false`, `--no-ext-diff`, and `--no-textconv` are explicitly allowed **protective options**, not extra operations. Never remove or override them to make a read succeed. `--no-optional-locks` prevents optional index refresh writes; `--no-pager` bypasses external pagers even in a terminal; `core.fsmonitor=false` disables configured fsmonitor programs. `GIT_NO_LAZY_FETCH=1` prevents missing-object reads from fetching from a promisor remote on supported Git. A missing object must remain missing: disclose the failed read and use the existing range fallback or local files, never fetch it.
+
+| Subcommand | Mandatory flags after the subcommand, before revisions/paths |
+|------------|------------------------------------------------------------|
+| `diff`, `log` (including `log -p`), `show`, `blame` | `--no-ext-diff --no-textconv`; both are accepted, including `show <rev>:<path>` |
+| `grep` | `--no-textconv` only; it rejects `--no-ext-diff` and does not use external diff drivers. Never add `--textconv`, `--open-files-in-pager`, or `-O`. |
+| Other allowed subcommands | Prefix only; do not pass diff-specific flags to `rev-parse`, `status`, `branch`, `tag`, `describe`, `ls-tree`, `cat-file`, `merge-base`, `ls-files`, or `rev-list`. |
+
+The snippets retain normal Git syntax for readability, but **none authorizes a bare Git invocation**, even in older assets or fallback/T3 workflows. Use only read flags; do not enable external helpers, pagers, or text conversion. The result is the raw repository content, so tell the tester if a configured conversion would have changed what they saw.
+
+**Git compatibility preflight.** The same prefix with `--version` (instead of a subcommand) is allowed and does not read objects. Lazy-fetch protection depends on the installed Git honoring `GIT_NO_LAZY_FETCH`; consult its locally available documentation/release notes. A successful `--version` or acceptance of another lazy-fetch option does not prove this variable works. Where support cannot be confirmed in a partial clone (or clone type is unknown), do not resolve objects that may be absent: disclose that the check could fetch, skip Git object/history reads, and use Read/Glob/Grep on existing code/docs/Kyro files. Determine partial-clone/promisor configuration and `.promisor` pack markers through filesystem reads, including common config when `.git` points to a worktree; if uncertain, treat clone type as unknown. A confirmed ordinary repository without promisor/partial-clone configuration can retain normal reads with the other protections. Never probe by reading a missing object in the user's repo, drop protection, install Git, or change config. If a required protective option is rejected, stop that Git read and disclose the limitation. This compatibility rule also applies without Kyro.
+
+The invocation was exercised on locally installed Git 2.56.0. Legacy environment-variable behavior was **not executed on a legacy git binary**; do not infer support for an older/vendor build from this result.
+
+### Allowed Git operations (with the mandatory invocation above)
 
 - `git rev-parse`, `git status --porcelain` (to observe only), `git branch --list`, `git branch -r`
 - `git tag --list`, `git tag --sort=-v:refname`, `git describe --tags`
@@ -41,13 +65,17 @@ Forbidden even though they sound like reads: `kyro context-pack` and `kyro docto
 
 ## Detecting the tier
 
-1. `git rev-parse --is-inside-work-tree` — not a repo: say so and stop investigating history; you can still read code.
-2. `.agents/kyro/` exists on disk (`test -d .agents/kyro` or Glob; it is often gitignored, so `git ls-files` is not enough)? If not → **T3**.
-3. `kyro status --json` succeeds and returns a parseable envelope? → **T1**. Fails, is missing, or returns something you cannot parse → **T2**. Do not try to install or update Kyro.
+Resolve roots **before** assigning a tier or looking up artifacts:
+
+1. Keep the starting directory and any path/workspace the tester named. Apply the Git compatibility preflight above. If supported, initially set `git_root` to that existing directory and run hardened `git rev-parse --is-inside-work-tree` and `git rev-parse --show-toplevel`; use the returned top-level as `git_root`. Not a repo: disclose unavailable history but continue reading code and locating Kyro files. Unsupported Git: resolve workspace directories with filesystem tools and leave history unavailable.
+2. Discover workspace candidates on disk with Read/Glob/Grep or `ls -a` / `test -d`: check the starting directory's ancestors within the repository, the root `.agents/kyro/`, and nested `**/.agents/kyro/` directories, including hidden/gitignored paths. `workspace_root` is the directory **containing** `.agents`, e.g. `<git_root>/packages/app`. `git ls-files` is insufficient because Kyro state is often ignored. Bound discovery to this repository/user-selected project; skip `.git`, dependencies, and unrelated repositories. If discovery is incomplete, disclose that uncertainty instead of asserting T3.
+3. Prefer an explicitly named workspace. Otherwise a named product path may select its unique nearest containing workspace; state the choice. With multiple candidates and no unambiguous path, ask the QA which workspace (or whether they want git-only analysis) before running Kyro or reading a scope ledger. Never silently pick the first candidate or select by scope id alone. A repo-wide request spanning multiple workspaces needs separate workspace/scope labels and ranges.
+4. With no applicable workspace after complete discovery → **T3**. With a selected workspace, run the allowed `kyro status --json` **from `workspace_root`** (use `cd` or the tool's working directory). Parseable success → **T1**; missing/failing CLI → **T2**, reading that workspace's files directly. Do not install/update Kyro. A missing `<git_root>/.agents/kyro/` or root-level CLI failure says nothing about a nested workspace.
+5. Run all other allowed Kyro commands from the selected `workspace_root`. Run Git through the prefix with `-C "$git_root"`. Resolve diff/log/grep/blame path filters relative to `git_root` (e.g. `packages/app/src/...`); the ledger's hashes address the containing repository, so no checkout or branch change is needed. If workspace discovery reveals a nested separate Git repository, resolve its own top-level and keep its hashes/ranges separate. Do not reuse the outer repository's refs.
 
 ## Kyro artifact map (T1/T2)
 
-All paths are relative to the repository root.
+All Kyro artifact paths below are relative to the selected **`workspace_root`**, which can differ from `git_root`. In-repo code/docs and Git path filters use `git_root`; never prepend `git_root` to a nested workspace's artifact path without its workspace prefix.
 
 | What | Where | Why it matters to QA |
 |------|-------|----------------------|
@@ -84,7 +112,7 @@ Read these before concluding "no documented intent": `CHANGELOG.md` / release no
 
 ## Kyro sprint and scope ranges (6.5.0+)
 
-Use this in T1/T2 for "what changed in sprint N / scope X", before the defaults below. T3 continues to use those defaults with no Kyro dependency. Read the selected scope's `sprint.json` directly; no new Kyro command is needed. Select `ledger[]` by sprint `n` within that scope, never by array offset or a sprint number from another scope. Do not replace explicit tester-supplied refs silently.
+Use this in T1/T2 for "what changed in sprint N / scope X", before the defaults below. T3 continues to use those defaults with no Kyro dependency. Read `<workspace_root>/.agents/kyro/scopes/{scope}/sprint.json` directly; no new Kyro command is needed. Select `ledger[]` by sprint `n` within that workspace and scope, never by array offset or a sprint number from another workspace/scope. Do not replace explicit tester-supplied refs silently.
 
 ### Resolve one closed sprint
 

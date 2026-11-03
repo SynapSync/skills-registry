@@ -57,7 +57,7 @@ Help a QA tester:
 
 ## Critical Rules
 
-1. **Read-only, by allowlist.** You may run only the commands listed in `assets/sources.md` → *Allowed commands*. Anything not on that list is forbidden, even if it looks harmless. Never edit, create, or delete files. Never run a Kyro command that mutates state or writes trace.
+1. **Read-only, by allowlist.** You may run only the commands listed in `assets/sources.md` → *Allowed commands*, with its mandatory hardened invocation for **every** Git command across this skill and all assets. Anything not on that list is forbidden, even if it looks harmless. Never edit, create, or delete files. Never run a Kyro command that mutates state or writes trace.
 2. **Analysis is not testing.** Never say a behavior "works", "was tested", "passed", or "is approved". Say what is *expected*, according to which source, and how the tester can check it.
 3. **Label every material claim** with one evidence label (see below). An unlabeled claim is a defect in your answer.
 4. **Automated verdicts are not manual validation.** A Kyro `pass` verdict means an agent recorded evidence and a verdict. State what that evidence did not cover (UI, copy, accessibility, localization, per-role permissions, compatibility, real data).
@@ -86,15 +86,17 @@ Label at the most useful granularity: per claim by default; per table row, list,
 
 ## Step 0 — Detect the Context Tier
 
-Do this once per session, before the first investigation (details in `assets/sources.md`):
+Do this once per session, before the first investigation (details in `assets/sources.md`): first resolve `workspace_root` (the directory containing the applicable `.agents/kyro/`) separately from `git_root`. Include nested/ignored workspaces in discovery; an ambiguous choice needs the QA's workspace/path selection before tier detection. Run Kyro from that workspace and hardened Git from its containing repository. A root-level missing directory or failed CLI is not evidence that no nested Kyro workspace exists.
 
 | Tier | Condition | What you can use |
 |------|-----------|------------------|
-| **T1 — Full Kyro** | `.agents/kyro/` exists and `kyro` runs | Allowed `kyro` read commands + Kyro files + git + code |
-| **T2 — Kyro files only** | `.agents/kyro/` exists, `kyro` missing or failing | Kyro files read directly + git + code |
-| **T3 — Git and code only** | No `.agents/kyro/` | git + code + in-repo docs (CHANGELOG, README, commit bodies) |
+| **T1 — Full Kyro** | Selected `workspace_root/.agents/kyro/` exists and `kyro` runs there | Allowed `kyro` read commands + Kyro files + git + code |
+| **T2 — Kyro files only** | Selected workspace has `.agents/kyro/`, `kyro` missing or failing there | That workspace's Kyro files read directly + git + code |
+| **T3 — Git and code only** | Discovery found no applicable Kyro workspace, or QA explicitly chose git-only | git + code + in-repo docs (CHANGELOG, README, commit bodies) |
 
-Tell the tester the tier in one sentence. In T3, say plainly that there is no approved plan, so expected behavior comes from the previous version, the code, and what the authors wrote in docs and commits — which describe what they believe they did, not an agreed intent. Expected behavior with no source at all is `[Inferred]`.
+Git availability is separate from the Kyro tier: follow the compatibility preflight in `sources.md`; when safe Git reads are unavailable, continue with local code/docs/artifacts and disclose unavailable history. T3 still requires no Kyro installation.
+
+Tell the tester the tier in one sentence. In T3, say plainly that no approved Kyro plan is available to this investigation (or the QA chose git-only), so expected behavior comes from the previous version, the code, and what the authors wrote in docs and commits — which describe what they believe they did, not an agreed intent. Expected behavior with no source at all is `[Inferred]`.
 
 ## Investigation Loop
 
