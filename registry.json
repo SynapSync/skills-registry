@@ -1,8 +1,8 @@
 {
   "$schema": "https://synapsync.dev/schemas/registry.json",
   "version": "2.1.0",
-  "lastUpdated": "2026-09-09T00:00:00Z",
-  "totalCognitives": 11,
+  "lastUpdated": "2026-11-03T00:00:00Z",
+  "totalCognitives": 12,
   "cognitives": [
     {
       "name": "skill-creator",
@@ -304,6 +304,37 @@
       ],
       "downloads": 0,
       "path": "cognitives/skills/workflow/kyro-pi-sprint-flow"
+    },
+    {
+      "name": "kyro-qa-assist",
+      "type": "skill",
+      "version": "1.1.0",
+      "description": "Read-only QA tester copilot: what changed, what to test, regression risk, defect reports",
+      "author": "joicodev",
+      "category": "testing",
+      "tags": [
+        "kyro",
+        "qa",
+        "testing",
+        "manual-testing",
+        "regression",
+        "test-design",
+        "risk-based-testing",
+        "defect-report",
+        "release-notes",
+        "read-only"
+      ],
+      "providers": [
+        "claude",
+        "openai",
+        "cursor",
+        "windsurf",
+        "copilot",
+        "gemini",
+        "codex"
+      ],
+      "downloads": 0,
+      "path": "cognitives/skills/testing/kyro-qa-assist"
     }
   ]
 }
