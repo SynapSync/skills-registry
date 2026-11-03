@@ -35,6 +35,8 @@ Heuristic by Karen N. Johnson, mapped to project sources:
 
 ## Finding indirect impact
 
+For sprint/scope questions in T1/T2, resolve the boundaries through `sources.md` → *Kyro sprint and scope ranges (6.5.0+)* before selecting the **Recent** set. Preserve per-sprint ranges when they cannot be composed exactly. A dirty close, missing/unreachable endpoint, skipped sprint, or active sprint leaves coverage uncertain: include the affected areas as investigation candidates and disclose the gap. An empty committed diff is not evidence that nothing changed outside git. T3 and fallback ranges keep the same risk/regression procedure.
+
 A change to one place can break another. For each changed area, look for:
 
 - **Shared code** — functions, components, or modules called from other flows (`git grep` the changed symbol).

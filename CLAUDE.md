@@ -40,6 +40,8 @@ Every cognitive lives in `cognitives/{type}s/{category}/{name}/` and must contai
 - **growth-ceo** (`cognitives/skills/planning/growth-ceo/`) — Elite tech CEO strategist combining first principles (Musk), 7 Powers (Helmer), flywheels (Bezos), and exponential thinking (Altman). Vision-first, resources-second. Generates billion-dollar-scale initiatives with Resource Acquisition Plans. Output: Contrarian Truth → Diagnosis → Initiatives → Flywheel Map → GTM → First Moves → What NOT to Build → 10X Question.
 - **kyro-qa-assist** (`cognitives/skills/testing/kyro-qa-assist/`) — Read-only conversational copilot for manual QA testers. Investigates git history, code, and Kyro artifacts to explain what changed, recommend risk-ranked tests and regression, judge observed behavior against oracles, and draft defect reports. Evidence-labeled claims; never certifies. Works without Kyro (git-only tier). Intent-gated assets.
 
+`kyro-qa-assist` v1.1.0 optionally resolves Kyro 6.5.0+ ledger git ranges in T1/T2, with explicit fallback and coverage warnings; its git-only tier and read-only authority remain unchanged.
+
 ### Agents
 - **feature-branch-manager** (`cognitives/agents/general/feature-branch-manager/`) — Git workflow agent for branch creation, pushing, and PR creation. Claude-only.
 

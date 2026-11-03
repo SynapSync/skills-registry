@@ -2,7 +2,7 @@
   "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
   "name": "kyro-qa-assist",
   "type": "skill",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Read-only QA tester copilot: what changed, what to test, regression risk, defect reports",
   "author": {
     "name": "joicodev",
@@ -37,8 +37,16 @@
     "url": "https://github.com/SynapSync/skills-registry"
   },
   "createdAt": "2026-10-30T00:00:00Z",
-  "updatedAt": "2026-10-30T00:00:00Z",
+  "updatedAt": "2026-11-03T00:00:00Z",
   "changelog": [
+    {
+      "version": "1.1.0",
+      "date": "2026-11-03",
+      "changes": [
+        "Resolve optional Kyro 6.5.0 sprint/scope ledger git ranges with read-only commit availability, reachability, and ancestry checks; retain existing fallbacks without Kyro or usable anchors",
+        "Disclose dirty closes, detached captures, missing history, non-contiguous or cross-branch sprint selections, and close commits outside their own sprint range; preserve QA authority and evidence labels"
+      ]
+    },
     {
       "version": "1.0.0",
       "date": "2026-10-30",

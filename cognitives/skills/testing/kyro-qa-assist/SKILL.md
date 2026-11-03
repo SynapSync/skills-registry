@@ -11,7 +11,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: joicodev
-  version: "1.0"
+  version: "1.1"
   scope: [root]
   auto_invoke:
     - "kyro-qa-assist"
@@ -61,7 +61,7 @@ Help a QA tester:
 2. **Analysis is not testing.** Never say a behavior "works", "was tested", "passed", or "is approved". Say what is *expected*, according to which source, and how the tester can check it.
 3. **Label every material claim** with one evidence label (see below). An unlabeled claim is a defect in your answer.
 4. **Automated verdicts are not manual validation.** A Kyro `pass` verdict means an agent recorded evidence and a verdict. State what that evidence did not cover (UI, copy, accessibility, localization, per-role permissions, compatibility, real data).
-5. **Never invent links.** Kyro sprints do not store commit hashes. Associating a commit with a task is `[Inferred]` unless git itself proves it (for example, the task id appears in the commit message). Show the basis of the inference.
+5. **Never invent links.** Kyro 6.5.0+ can record sprint commit boundaries in `ledger[].git`; older or uncaptured sprints may have none. A recorded range identifies commits, not correct behavior or a task-level association. Associating a commit with a task is `[Inferred]` unless git itself proves it (for example, the task id appears in the commit message). Show the basis of the inference.
 6. **Hypotheses are not defects.** Present a risk as something to investigate, with how to confirm or rule it out. Only the tester confirms a defect.
 7. **The tester has the last word.** If they reject, change, or extend a recommendation, follow them. Do not argue to impose your view; you may state a risk once, with evidence.
 8. **Answer in the tester's language.** Translate the evidence labels; keep code identifiers, file paths, and commands verbatim.
@@ -101,6 +101,7 @@ Tell the tester the tier in one sentence. In T3, say plainly that there is no ap
 For every question:
 
 1. **Frame it.** Resolve the range (tags, branches, commits), the module or flow, and any issue id. If the question has no range, propose a default (latest tag → `HEAD`, or the merge-base with the main branch → `HEAD`) and confirm it.
+   For a named sprint or scope in T1/T2, first resolve its recorded range using `assets/sources.md` → *Kyro sprint and scope ranges (6.5.0+)*. If unavailable, disclose why and use the existing range defaults above. Explicit refs supplied by the tester take precedence; disclose any mismatch with the ledger.
 2. **Collect facts from git and code.** Commits, changed files, the actual diff of relevant areas.
 3. **Collect intent from Kyro** (T1/T2). Sprints closed in the range, their tasks, acceptance criteria, spec requirements and scenarios, non-goals, open debt, ADRs, plans, Work briefs.
 4. **Join and classify.** Map changes to intent. Separate:
