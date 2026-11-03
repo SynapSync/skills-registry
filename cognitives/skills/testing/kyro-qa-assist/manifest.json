@@ -45,7 +45,7 @@
       "changes": [
         "Resolve optional Kyro 6.5.0 sprint/scope ledger git ranges with read-only commit availability, reachability, and ancestry checks; retain existing fallbacks without Kyro or usable anchors",
         "Disclose dirty closes, detached captures, missing history, non-contiguous or cross-branch sprint selections, and close commits outside their own sprint range; preserve QA authority and evidence labels",
-        "Require one hardened Git prefix for all existing and new reads, with subcommand-specific helper suppression, disabled automatic signature checks, forbidden signature format fields, and no-op verifier overrides and explicit unsupported-Git degradation",
+        "Require one hardened Git prefix for all existing and new reads, with subcommand-specific helper suppression, disabled automatic signature checks, forbidden signature format fields, no-op verifier overrides, and separate hardened submodule inspection and explicit unsupported-Git degradation",
         "Resolve nested Kyro workspace roots before tier detection and artifact reads; require QA selection for ambiguous workspaces and keep repository-relative Git paths separate"
       ]
     },
