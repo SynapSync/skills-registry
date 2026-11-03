@@ -18,10 +18,12 @@ This list is exhaustive. If a command is not here, do not run it.
 Every `git` example and allowlist entry in **all** skill files is shorthand for this single prefix, followed by the subcommand and the protective flags in the table below:
 
 ```bash
-GIT_NO_LAZY_FETCH=1 git --no-optional-locks --no-pager -c core.fsmonitor=false -C "$git_root" <subcommand> <flags-and-arguments>
+GIT_NO_LAZY_FETCH=1 git --no-optional-locks --no-pager -c core.fsmonitor=false -c log.showSignature=false -c gpg.program=true -c gpg.openpgp.program=true -c gpg.ssh.program=true -c gpg.x509.program=true -C "$git_root" <subcommand> <flags-and-arguments>
 ```
 
-This environment assignment, `-C`, `--no-optional-locks`, `--no-pager`, `-c core.fsmonitor=false`, `--no-ext-diff`, and `--no-textconv` are explicitly allowed **protective options**, not extra operations. Never remove or override them to make a read succeed. `--no-optional-locks` prevents optional index refresh writes; `--no-pager` bypasses external pagers even in a terminal; `core.fsmonitor=false` disables configured fsmonitor programs. `GIT_NO_LAZY_FETCH=1` prevents missing-object reads from fetching from a promisor remote on supported Git. A missing object must remain missing: disclose the failed read and use the existing range fallback or local files, never fetch it.
+This environment assignment, `-C`, `--no-optional-locks`, `--no-pager`, all `-c` settings in this prefix, `--no-ext-diff`, and `--no-textconv` are explicitly allowed **protective options**, not extra operations. Never remove or override them to make a read succeed. `--no-optional-locks` prevents optional index refresh writes; `--no-pager` bypasses external pagers even in a terminal; `core.fsmonitor=false` disables configured fsmonitor programs. `log.showSignature=false` disables automatic signature verification in `log` and `show`; the four `gpg.*program=true` settings replace configured OpenPGP (legacy and explicit), SSH, and X.509 verifiers with the system no-op `true` as defence in depth. They do not validate signatures. `GIT_NO_LAZY_FETCH=1` prevents missing-object reads from fetching from a promisor remote on supported Git. A missing object must remain missing: disclose the failed read and use the existing range fallback or local files, never fetch it.
+
+**No signature verification.** Never use `--show-signature` or signature placeholders `%G?`, `%GG`, `%GS`, `%GK`, `%GF`, `%GP`, `%GT` in any `--format`/`--pretty` argument, including `format:`/`tformat:` forms and conditional-space/newline modifiers (`% G?`, `%+G?`, `%-G?`, etc.). This applies to every allowed subcommand, including `log`, `show`, and `rev-list`; also reject ref-format signature atoms such as `%(signature:grade)` in branch/tag listings. Keep `--format`/`--pretty` usable for built-in formats (e.g. `oneline`, `fuller`, `raw`) and directly specified literal formats with no signature fields (e.g. `format:%H %s`). Do not select repository-configured named format aliases, which may hide signature fields, or add tag verification flags. The verifier overrides are a backstop, not permission to request verification or interpret signature/trust status as checked. If the system no-op is unavailable or a protected read fails, disclose the limitation; do not substitute a repository program or remove protection.
 
 | Subcommand | Mandatory flags after the subcommand, before revisions/paths |
 |------------|------------------------------------------------------------|
@@ -39,7 +41,7 @@ The invocation was exercised on locally installed Git 2.56.0. Legacy environment
 
 - `git rev-parse`, `git status --porcelain` (to observe only), `git branch --list`, `git branch -r`
 - `git tag --list`, `git tag --sort=-v:refname`, `git describe --tags`
-- `git log` (any read flags: `--oneline`, `--no-merges`, `--stat`, `--name-status`, `--format`, `--follow`, `-S`, `-G`, `--grep`, `--since`, `--until`, `-- <path>`)
+- `git log` (read flags: `--oneline`, `--no-merges`, `--stat`, `--name-status`, `--format`/`--pretty` restricted by *No signature verification* above, `--follow`, `-S`, `-G`, `--grep`, `--since`, `--until`, `-- <path>`)
 - `git diff <a>..<b>` / `git diff <a>...<b>` with read flags (`--stat`, `--name-status`, `--find-renames`, `-- <path>`)
 - `git show <rev>`, `git show <rev>:<path>`
 - `git ls-tree <rev> [<path>]`, `git cat-file -e|-p|-t <rev>:<path>` — check a file at a given version
