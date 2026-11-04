@@ -277,7 +277,7 @@
     {
       "name": "kyro-pi-sprint-flow",
       "type": "skill",
-      "version": "1.4.0",
+      "version": "1.4.1",
       "description": "Pi Kyro orchestrator with optional QA-or-close and same-session re-QA",
       "author": "joicodev",
       "category": "workflow",
