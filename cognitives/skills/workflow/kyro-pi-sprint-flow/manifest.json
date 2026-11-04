@@ -2,7 +2,7 @@
   "$schema": "https://synapsync.dev/schemas/cognitive-manifest.json",
   "name": "kyro-pi-sprint-flow",
   "type": "skill",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Pi Kyro orchestrator with optional QA-or-close and same-session re-QA",
   "author": {
     "name": "joicodev",
@@ -37,8 +37,16 @@
     "url": "https://github.com/SynapSync/skills-registry"
   },
   "createdAt": "2026-09-08T00:00:00Z",
-  "updatedAt": "2026-09-12T00:00:00Z",
+  "updatedAt": "2026-11-03T00:00:00Z",
   "changelog": [
+    {
+      "version": "1.5.0",
+      "date": "2026-11-03",
+      "changes": [
+        "Executor and Fix workers stop at qa_or_close or completion of all sprint tasks and return control; authorized Close and QA workers retain their own duties",
+        "Require English-only orchestrator-worker briefs, injected state, contracts, handoffs, follow-ups, and reports while preserving existing user-facing language and verbatim QA output"
+      ]
+    },
     {
       "version": "1.4.0",
       "date": "2026-09-12",

@@ -9,7 +9,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: joicodev
-  version: "1.4"
+  version: "1.5"
   scope: [root]
   auto_invoke:
     - "run the active sprint"
@@ -69,6 +69,7 @@ Run the active Kyro sprint end-to-end through isolated workers, preserve every w
 11. **Cap the fix → QA loop at 3 rounds.** On the fourth `CHANGES_REQUIRED`, stop and ask the user. Do not grind.
 12. **Closing a sprint is a user gate.** Even if `KYRO NEXT STEP` is close, ask before any close action. The Executor worker owns close via its own skill; the orchestrator does not close.
 13. **Never paraphrase a worker's final report.** Store the full text. For Executor and Fix, present every contract section — no dropped fields. For QA, present the worker's final message **verbatim** (the exact `kyro qa <scope>` output). Do not summarize, translate, trim, or rewrite it.
+14. **Orchestrator–worker communication is English only.** Briefs, injected flow state, return contracts, handoffs, follow-up messages, and QA or fix reports must always be in English, regardless of the user's language. Normalize prior non-English context into English before injecting it into a worker; preserve the original `raw_output` in the orchestrator. This rule covers only orchestrator–worker traffic: user-facing messages and gates keep their existing language behavior, including verbatim report presentation.
 
 ## Role Split
 
@@ -147,6 +148,7 @@ Launch a **new** subagent. Tell it to load its skills itself. Inject any prior f
 
 ```text
 You are the Executor Worker for the currently active Kyro sprint.
+All communication with the orchestrator is in English only, including your return contract.
 
 Load and follow:
 - kyro-task-context  (as many times as needed)
@@ -162,6 +164,11 @@ Do not hand-edit sprint.json or other Kyro-managed state.
 Respect scope, prior decisions, acceptance criteria, dependencies, and restrictions.
 Run the validations the executor skill requires.
 
+Stop when KYRO NEXT STEP reaches qa_or_close, or when all sprint tasks
+are complete. Do not run kyro qa, do not close the sprint, and do not
+ask the user whether to run QA or close, even if kyro-sprint-executor
+tells you to. Those decisions belong to the orchestrator.
+Return control by sending the Executor return contract.
 When finished, return the Executor return contract. Do not return a prose-only summary.
 ```
 
@@ -169,13 +176,17 @@ If prior `KYRO FLOW STATE` exists, append it under `Prior orchestrator state (in
 
 ### Close Worker variant
 
-When the user selected close without QA, or QA approved, launch a fresh Executor Worker with this additional instruction:
+When the user selected close without QA, or QA approved, launch a fresh Executor/Close Worker with this brief instead of the Step 1 execution brief:
 
 ```text
 The active scope is <active_scope>. The user has selected the close path.
+All communication with the orchestrator is in English only, including your return contract.
+Load kyro-task-context and kyro-sprint-executor for the authorized close.
+The Step 1 execution-only stop boundary does not apply to this Close Worker.
 Do not re-open the QA-or-close decision. Recover real state, follow the Kyro close protocol,
 run required pre-close checks, present the normal close confirmation gate, and use only the
 CLI-owned close operation after that confirmation. Do not hand-edit Kyro state.
+When finished, return the Executor return contract. Do not return a prose-only summary.
 ```
 
 The parent only delegates and presents gates; it never invokes the close operation itself.
@@ -295,6 +306,7 @@ Launch a **new** independent subagent. Inject Executor result (and any later fix
 
 ```text
 You are the QA / Certificator Worker for this Kyro sprint.
+All communication with the orchestrator is in English only, including your return contract.
 
 Active scope: <active_scope>
 Executor result (starting point, not proof):
@@ -304,6 +316,7 @@ Executor result (starting point, not proof):
 
 Invoke and follow the host Kyro command/skill: `kyro qa <active_scope>`.
 It is a host command/skill, not a subcommand of the Kyro CLI binary.
+Require the QA command/skill to produce its original report in English; forward that output verbatim.
 
 Validate the real work independently.
 Do not assume something is correct because the Executor said it is.
@@ -386,6 +399,21 @@ Then read `QA STATUS` and `KYRO NEXT STEP` from that same text. Do not assume th
 5. Increment `fix_qa_rounds`. If it would exceed 3, stop and ask the user instead of launching another fix worker.
 6. Launch a **new** Fix Worker with: prior Executor result, QA result, Fix Plan, materialized task ids, and flow state.
 7. Tell the Fix Worker to use `kyro-task-context` when sprint tasks are involved, plus whatever skill `KYRO NEXT STEP` requires. Do not assume it is always `kyro-sprint-executor`.
+
+Include this boundary in the Fix Worker brief, alongside the context and Fix Plan above:
+
+```text
+You are the Fix Worker for the active Kyro sprint. Apply the supplied Fix Plan
+to the materialized task ids, following the skills required by KYRO NEXT STEP.
+All communication with the orchestrator is in English only, including your return contract.
+
+Stop when KYRO NEXT STEP reaches qa_or_close, or when all sprint tasks
+are complete. Do not run kyro qa, do not close the sprint, and do not
+ask the user whether to run QA or close, even if kyro-sprint-executor
+tells you to. Those decisions belong to the orchestrator.
+Return control by sending the Executor return contract.
+```
+
 8. Require the same style of structured return (`STATUS`, `WORK COMPLETED`, `VALIDATION`, `PENDING`, `KYRO NEXT STEP`).
 9. Present the fix status. When the real route returns to `qa_or_close`, launch a **new** QA worker (Step 3) immediately because `qa_remediation_pending` is true. Do not offer close and do not request a second QA-track authorization. On Pi, still list active models and confirm `qa_model` before that launch; reuse the last pick only if the user already confirmed it for this QA track.
 
@@ -400,6 +428,14 @@ Present the block. Do not launch the next worker until the block is resolved or 
 ## Worker Launch Pattern
 
 Use the host's subagent / Task mechanism.
+
+Every worker brief, including any additional worker selected by `KYRO NEXT STEP`, must carry this line:
+
+```text
+All communication with the orchestrator is in English only, including your return contract.
+```
+
+Any additional worker assigned sprint execution or remediation must receive the Step 1 stop boundary. Do not apply that boundary to a worker explicitly authorized for close or QA.
 
 ```text
 WRONG: orchestrator loads kyro-sprint-executor and starts coding
