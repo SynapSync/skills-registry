@@ -9,7 +9,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: joicodev
-  version: "1.4"
+  version: "1.5"
   scope: [root]
   auto_invoke:
     - "run the active sprint"
